@@ -4,14 +4,22 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using aspnetcore_react_auth.Data;
 using aspnetcore_react_auth.Models;
-using aspnetcore_react_auth.Services;
+// using aspnetcore_react_auth.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+// var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//     options.UseSqlite(connectionString));
+
+var connectionString = "server=localhost;port=3306;database=PizzaDB;uid=root;password=0000";
+var serverVersion = new MySqlServerVersion(new Version(8, 0, 26));
+builder.Services.AddDbContext<ApplicationDbContext>(
+ dbContextOptions => dbContextOptions.UseMySql(connectionString, serverVersion)
+);
+
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>
@@ -27,7 +35,7 @@ builder.Services.AddAuthentication()
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-builder.Services.AddScoped<PizzaService>();
+// builder.Services.AddScoped<PizzaService>();
 
 var app = builder.Build();
 
@@ -55,8 +63,6 @@ app.MapControllerRoute(
     pattern: "{controller}/{action=Index}/{id?}");
 app.MapRazorPages();
 
-app.MapFallbackToFile("index.html"); ;
-
-app.CreateDbIfNotExists();
+app.MapFallbackToFile("index.html");
 
 app.Run();
