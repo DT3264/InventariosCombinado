@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using aspnetcore_react_auth.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace aspnetcore_react_auth.Controllers;
 
-[Authorize]
+//[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class WeatherForecastController : ControllerBase
@@ -15,9 +16,13 @@ public class WeatherForecastController : ControllerBase
 
     private readonly ILogger<WeatherForecastController> _logger;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+
+    private readonly ApplicationDbContext _context;
+
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, ApplicationDbContext context)
     {
         _logger = logger;
+        _context = context;
     }
 
     [HttpGet]
@@ -31,4 +36,53 @@ public class WeatherForecastController : ControllerBase
         })
         .ToArray();
     }
+
+    [HttpGet]
+    [Route("ByCompany")]
+    public IEnumerable<Object> GetEmployeesByCompany()
+    {
+        return _context.Employees
+            .GroupBy(e => e.CompanyId)
+            .Select(e => new {
+                Company = e.Key,
+                Empleados = e.Count()
+            });
+
+    }
+
+    // GET: api/
+    [HttpGet]
+    [Route("top5")]
+    public IEnumerable<Object> GetTop5()
+    {
+        return _context.Employees
+            .Where(e => e.CompanyId == 1)
+            .Join(_context.Movements,
+            e => e.EmployeeId,
+            m => m.EmployeeId,
+            (e, m) => new
+            {
+                Empleado = e.FirstName + " " + e.LastName,
+                IdMovimiento = m.MovementId,
+                Anio = m.Date.Year
+            })
+            .Where(em => em.Anio == 1996)
+            .Join(_context.Movementdetails,
+            em => em.IdMovimiento,
+            md => md.MovementId,
+            (em, md) => new
+            {
+                Empleado = em.Empleado,
+                Cantidad = md.Quantity
+            })
+            .GroupBy(e => e.Empleado)
+            .Select(e => new
+            {
+                Empleado = e.Key,
+                Ventas = e.Sum(g => g.Cantidad)
+            });
+
+    }
+
+
 }

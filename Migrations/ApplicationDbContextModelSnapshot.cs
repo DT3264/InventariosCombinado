@@ -98,6 +98,10 @@ namespace aspnetcore_react_auth.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
 
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int")
+                        .HasColumnName("CompanyID");
+
                     b.Property<string>("Description")
                         .HasColumnType("longtext");
 
@@ -108,123 +112,51 @@ namespace aspnetcore_react_auth.Migrations
 
                     b.HasIndex(new[] { "CategoryName" }, "Categories_CategoryName");
 
+                    b.HasIndex(new[] { "CompanyId" }, "fk_categories_companies1_idx");
+
                     b.ToTable("categories", (string)null);
                 });
 
-            modelBuilder.Entity("aspnetcore_react_auth.Models.Comentario", b =>
+            modelBuilder.Entity("aspnetcore_react_auth.Models.Company", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CompanyId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasColumnName("id");
+                        .HasColumnName("CompanyID");
 
-                    b.Property<sbyte?>("Bloqueado")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint")
-                        .HasColumnName("bloqueado")
-                        .HasDefaultValueSql("'0'");
-
-                    b.Property<string>("Comentario1")
+                    b.Property<string>("AccountEmail")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("comentario");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
-                    b.Property<DateOnly>("Fecha")
-                        .HasColumnType("date")
-                        .HasColumnName("fecha");
+                    b.Property<sbyte>("Active")
+                        .HasColumnType("tinyint");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("comentarios", (string)null);
-                });
-
-            modelBuilder.Entity("aspnetcore_react_auth.Models.Customer", b =>
-                {
-                    b.Property<string>("CustomerId")
-                        .HasMaxLength(5)
-                        .HasColumnType("char(5)")
-                        .HasColumnName("CustomerID")
-                        .IsFixedLength();
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(60)
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("City")
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                    b.Property<DateOnly>("BeginPlan")
+                        .HasColumnType("date");
 
                     b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasMaxLength(70)
+                        .HasColumnType("varchar(70)");
+
+                    b.Property<DateOnly>("EndPlan")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("varchar(40)");
 
-                    b.Property<string>("ContactName")
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
+                    b.HasKey("CompanyId");
 
-                    b.Property<string>("ContactTitle")
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
+                    b.HasIndex(new[] { "AccountEmail" }, "AccountEmail_UNIQUE")
+                        .IsUnique();
 
-                    b.Property<string>("Country")
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                    b.HasIndex(new[] { "CompanyName" }, "CompanyName_UNIQUE")
+                        .IsUnique();
 
-                    b.Property<string>("Email")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("email");
-
-                    b.Property<string>("Fax")
-                        .HasMaxLength(24)
-                        .HasColumnType("varchar(24)");
-
-                    b.Property<string>("Password")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("password");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(24)
-                        .HasColumnType("varchar(24)");
-
-                    b.Property<string>("PostalCode")
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<string>("Region")
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
-
-                    b.HasKey("CustomerId");
-
-                    b.HasIndex(new[] { "City" }, "Customers_City");
-
-                    b.HasIndex(new[] { "CompanyName" }, "Customers_CompanyName");
-
-                    b.HasIndex(new[] { "PostalCode" }, "Customers_PostalCode");
-
-                    b.HasIndex(new[] { "Region" }, "Customers_Region");
-
-                    b.ToTable("customers", (string)null);
-                });
-
-            modelBuilder.Entity("aspnetcore_react_auth.Models.Customerdemographic", b =>
-                {
-                    b.Property<string>("CustomerTypeId")
-                        .HasMaxLength(10)
-                        .HasColumnType("char(10)")
-                        .HasColumnName("CustomerTypeID")
-                        .IsFixedLength();
-
-                    b.Property<string>("CustomerDesc")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("CustomerTypeId")
-                        .HasName("PRIMARY");
-
-                    b.ToTable("customerdemographics", (string)null);
+                    b.ToTable("companies", (string)null);
                 });
 
             modelBuilder.Entity("aspnetcore_react_auth.Models.Employee", b =>
@@ -238,25 +170,13 @@ namespace aspnetcore_react_auth.Migrations
                         .HasMaxLength(60)
                         .HasColumnType("varchar(60)");
 
-                    b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("City")
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
-
-                    b.Property<string>("Country")
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int")
+                        .HasColumnName("CompanyID");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("email");
-
-                    b.Property<string>("Extension")
-                        .HasMaxLength(4)
-                        .HasColumnType("varchar(4)");
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -275,50 +195,23 @@ namespace aspnetcore_react_auth.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
 
-                    b.Property<string>("Notes")
-                        .HasColumnType("longtext");
-
                     b.Property<string>("Password")
-                        .HasMaxLength(50)
-                        .HasColumnType("varchar(50)")
-                        .HasColumnName("password");
-
-                    b.Property<byte[]>("Photo")
-                        .HasColumnType("longblob");
-
-                    b.Property<string>("PhotoPath")
-                        .HasMaxLength(255)
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("PostalCode")
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<string>("Region")
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
+                        .HasMaxLength(40)
+                        .HasColumnType("varchar(40)");
 
                     b.Property<int?>("ReportsTo")
                         .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
-
-                    b.Property<string>("TitleOfCourtesy")
-                        .HasMaxLength(25)
-                        .HasColumnType("varchar(25)");
 
                     b.HasKey("EmployeeId");
 
                     b.HasIndex(new[] { "LastName" }, "Employees_LastName");
 
-                    b.HasIndex(new[] { "PostalCode" }, "Employees_PostalCode");
-
                     b.HasIndex(new[] { "ReportsTo" }, "FK_Employees_Employees");
 
                     b.HasIndex(new[] { "Email" }, "UQ_Email")
                         .IsUnique();
+
+                    b.HasIndex(new[] { "CompanyId" }, "fk_employees_companies1_idx");
 
                     b.ToTable("employees", (string)null);
                 });
@@ -330,8 +223,16 @@ namespace aspnetcore_react_auth.Migrations
                         .HasColumnType("int")
                         .HasColumnName("MovementID");
 
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int")
+                        .HasColumnName("CompanyID");
+
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int")
+                        .HasColumnName("EmployeeID");
 
                     b.Property<string>("Notes")
                         .HasMaxLength(200)
@@ -365,6 +266,10 @@ namespace aspnetcore_react_auth.Migrations
 
                     b.HasIndex(new[] { "TargetWarehouseId" }, "fk_Movimientos_warehouses2_idx");
 
+                    b.HasIndex(new[] { "CompanyId" }, "fk_movements_companies1_idx");
+
+                    b.HasIndex(new[] { "EmployeeId" }, "fk_movements_employees1_idx");
+
                     b.ToTable("movements", (string)null);
                 });
 
@@ -393,111 +298,6 @@ namespace aspnetcore_react_auth.Migrations
                     b.ToTable("movementdetails", (string)null);
                 });
 
-            modelBuilder.Entity("aspnetcore_react_auth.Models.Order", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("OrderID");
-
-                    b.Property<string>("CustomerId")
-                        .HasMaxLength(5)
-                        .HasColumnType("char(5)")
-                        .HasColumnName("CustomerID")
-                        .IsFixedLength();
-
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int")
-                        .HasColumnName("EmployeeID");
-
-                    b.Property<double?>("Freight")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("double")
-                        .HasDefaultValueSql("'0'");
-
-                    b.Property<DateTime?>("OrderDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<DateTime?>("RequiredDate")
-                        .HasColumnType("datetime");
-
-                    b.Property<string>("ShipAddress")
-                        .HasMaxLength(60)
-                        .HasColumnType("varchar(60)");
-
-                    b.Property<string>("ShipCity")
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
-
-                    b.Property<string>("ShipCountry")
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
-
-                    b.Property<string>("ShipName")
-                        .HasMaxLength(40)
-                        .HasColumnType("varchar(40)");
-
-                    b.Property<string>("ShipPostalCode")
-                        .HasMaxLength(10)
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<string>("ShipRegion")
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
-
-                    b.Property<int?>("ShipVia")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("ShippedDate")
-                        .HasColumnType("datetime");
-
-                    b.HasKey("OrderId");
-
-                    b.HasIndex(new[] { "CustomerId" }, "FK_Orders_Customers");
-
-                    b.HasIndex(new[] { "EmployeeId" }, "Orders_EmployeeID");
-
-                    b.HasIndex(new[] { "OrderDate" }, "Orders_OrderDate");
-
-                    b.HasIndex(new[] { "ShipPostalCode" }, "Orders_ShipPostalCode");
-
-                    b.HasIndex(new[] { "ShippedDate" }, "Orders_ShippedDate");
-
-                    b.HasIndex(new[] { "ShipVia" }, "Orders_ShippersOrders");
-
-                    b.ToTable("orders", (string)null);
-                });
-
-            modelBuilder.Entity("aspnetcore_react_auth.Models.Orderdetail", b =>
-                {
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int")
-                        .HasColumnName("OrderID");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int")
-                        .HasColumnName("ProductID");
-
-                    b.Property<double>("Discount")
-                        .HasColumnType("double");
-
-                    b.Property<short>("Quantity")
-                        .HasColumnType("smallint");
-
-                    b.Property<double>("UnitPrice")
-                        .HasColumnType("double");
-
-                    b.HasKey("OrderId", "ProductId")
-                        .HasName("PRIMARY")
-                        .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-
-                    b.HasIndex(new[] { "OrderId" }, "OrderDetails_OrderID");
-
-                    b.HasIndex(new[] { "ProductId" }, "OrderDetails_ProductID");
-
-                    b.ToTable("orderdetails", (string)null);
-                });
-
             modelBuilder.Entity("aspnetcore_react_auth.Models.Product", b =>
                 {
                     b.Property<int>("ProductId")
@@ -508,6 +308,10 @@ namespace aspnetcore_react_auth.Migrations
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int")
                         .HasColumnName("CategoryID");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int")
+                        .HasColumnName("CompanyID");
 
                     b.Property<string>("PhotoPath")
                         .HasMaxLength(50)
@@ -539,28 +343,9 @@ namespace aspnetcore_react_auth.Migrations
 
                     b.HasIndex(new[] { "SupplierId" }, "Products_SupplierID");
 
+                    b.HasIndex(new[] { "CompanyId" }, "fk_products_companies1_idx");
+
                     b.ToTable("products", (string)null);
-                });
-
-            modelBuilder.Entity("aspnetcore_react_auth.Models.Shipper", b =>
-                {
-                    b.Property<int>("ShipperId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("ShipperID");
-
-                    b.Property<string>("CompanyName")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("varchar(40)");
-
-                    b.Property<string>("Phone")
-                        .HasMaxLength(24)
-                        .HasColumnType("varchar(24)");
-
-                    b.HasKey("ShipperId");
-
-                    b.ToTable("shippers", (string)null);
                 });
 
             modelBuilder.Entity("aspnetcore_react_auth.Models.Supplier", b =>
@@ -578,6 +363,10 @@ namespace aspnetcore_react_auth.Migrations
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
 
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int")
+                        .HasColumnName("CompanyID");
+
                     b.Property<string>("CompanyName")
                         .IsRequired()
                         .HasMaxLength(40)
@@ -587,20 +376,9 @@ namespace aspnetcore_react_auth.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("varchar(30)");
 
-                    b.Property<string>("ContactTitle")
-                        .HasMaxLength(30)
-                        .HasColumnType("varchar(30)");
-
                     b.Property<string>("Country")
                         .HasMaxLength(15)
                         .HasColumnType("varchar(15)");
-
-                    b.Property<string>("Fax")
-                        .HasMaxLength(24)
-                        .HasColumnType("varchar(24)");
-
-                    b.Property<string>("HomePage")
-                        .HasColumnType("longtext");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(24)
@@ -610,15 +388,13 @@ namespace aspnetcore_react_auth.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("varchar(10)");
 
-                    b.Property<string>("Region")
-                        .HasMaxLength(15)
-                        .HasColumnType("varchar(15)");
-
                     b.HasKey("SupplierId");
 
                     b.HasIndex(new[] { "CompanyName" }, "Suppliers_CompanyName");
 
                     b.HasIndex(new[] { "PostalCode" }, "Suppliers_PostalCode");
+
+                    b.HasIndex(new[] { "CompanyId" }, "fk_suppliers_companies1_idx");
 
                     b.ToTable("suppliers", (string)null);
                 });
@@ -634,12 +410,18 @@ namespace aspnetcore_react_auth.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("varchar(100)");
 
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int")
+                        .HasColumnName("CompanyID");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(45)
                         .HasColumnType("varchar(45)");
 
                     b.HasKey("WarehouseId");
+
+                    b.HasIndex(new[] { "CompanyId" }, "fk_warehouses_companies1_idx");
 
                     b.ToTable("warehouses", (string)null);
                 });
@@ -673,31 +455,6 @@ namespace aspnetcore_react_auth.Migrations
                     b.HasIndex(new[] { "ProductId" }, "fk_WarehouseProducts_products1_idx");
 
                     b.ToTable("warehouseproducts", (string)null);
-                });
-
-            modelBuilder.Entity("Customercustomerdemo", b =>
-                {
-                    b.Property<string>("CustomerId")
-                        .HasMaxLength(5)
-                        .HasColumnType("char(5)")
-                        .HasColumnName("CustomerID")
-                        .IsFixedLength();
-
-                    b.Property<string>("CustomerTypeId")
-                        .HasMaxLength(10)
-                        .HasColumnType("char(10)")
-                        .HasColumnName("CustomerTypeID")
-                        .IsFixedLength();
-
-                    b.HasKey("CustomerId", "CustomerTypeId")
-                        .HasName("PRIMARY")
-                        .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-
-                    b.HasIndex(new[] { "CustomerTypeId" }, "FK_CustomerCustomerDemo");
-
-                    b.HasIndex(new[] { "CustomerId" }, "FK_CustomerCustomerDemo_Customers");
-
-                    b.ToTable("customercustomerdemo", (string)null);
                 });
 
             modelBuilder.Entity("Duende.IdentityServer.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -973,18 +730,49 @@ namespace aspnetcore_react_auth.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("aspnetcore_react_auth.Models.Category", b =>
+                {
+                    b.HasOne("aspnetcore_react_auth.Models.Company", "Company")
+                        .WithMany("Categories")
+                        .HasForeignKey("CompanyId")
+                        .IsRequired()
+                        .HasConstraintName("fk_categories_companies1");
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("aspnetcore_react_auth.Models.Employee", b =>
                 {
+                    b.HasOne("aspnetcore_react_auth.Models.Company", "Company")
+                        .WithMany("Employees")
+                        .HasForeignKey("CompanyId")
+                        .IsRequired()
+                        .HasConstraintName("fk_employees_companies1");
+
                     b.HasOne("aspnetcore_react_auth.Models.Employee", "ReportsToNavigation")
                         .WithMany("InverseReportsToNavigation")
                         .HasForeignKey("ReportsTo")
                         .HasConstraintName("FK_Employees_Employees");
+
+                    b.Navigation("Company");
 
                     b.Navigation("ReportsToNavigation");
                 });
 
             modelBuilder.Entity("aspnetcore_react_auth.Models.Movement", b =>
                 {
+                    b.HasOne("aspnetcore_react_auth.Models.Company", "Company")
+                        .WithMany("Movements")
+                        .HasForeignKey("CompanyId")
+                        .IsRequired()
+                        .HasConstraintName("fk_movements_companies1");
+
+                    b.HasOne("aspnetcore_react_auth.Models.Employee", "Employee")
+                        .WithMany("Movements")
+                        .HasForeignKey("EmployeeId")
+                        .IsRequired()
+                        .HasConstraintName("fk_movements_employees1");
+
                     b.HasOne("aspnetcore_react_auth.Models.Warehouse", "OriginWarehouse")
                         .WithMany("MovementOriginWarehouses")
                         .HasForeignKey("OriginWarehouseId")
@@ -1000,6 +788,10 @@ namespace aspnetcore_react_auth.Migrations
                         .WithMany("MovementTargetWarehouses")
                         .HasForeignKey("TargetWarehouseId")
                         .HasConstraintName("fk_Movimientos_warehouses2");
+
+                    b.Navigation("Company");
+
+                    b.Navigation("Employee");
 
                     b.Navigation("OriginWarehouse");
 
@@ -1027,55 +819,18 @@ namespace aspnetcore_react_auth.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("aspnetcore_react_auth.Models.Order", b =>
-                {
-                    b.HasOne("aspnetcore_react_auth.Models.Customer", "Customer")
-                        .WithMany("Orders")
-                        .HasForeignKey("CustomerId")
-                        .HasConstraintName("FK_Orders_Customers");
-
-                    b.HasOne("aspnetcore_react_auth.Models.Employee", "Employee")
-                        .WithMany("Orders")
-                        .HasForeignKey("EmployeeId")
-                        .HasConstraintName("FK_Orders_Employees");
-
-                    b.HasOne("aspnetcore_react_auth.Models.Shipper", "ShipViaNavigation")
-                        .WithMany("Orders")
-                        .HasForeignKey("ShipVia")
-                        .HasConstraintName("FK_Orders_Shippers");
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("ShipViaNavigation");
-                });
-
-            modelBuilder.Entity("aspnetcore_react_auth.Models.Orderdetail", b =>
-                {
-                    b.HasOne("aspnetcore_react_auth.Models.Order", "Order")
-                        .WithMany("Orderdetails")
-                        .HasForeignKey("OrderId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Order_Details_Orders");
-
-                    b.HasOne("aspnetcore_react_auth.Models.Product", "Product")
-                        .WithMany("Orderdetails")
-                        .HasForeignKey("ProductId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Order_Details_Products");
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("aspnetcore_react_auth.Models.Product", b =>
                 {
                     b.HasOne("aspnetcore_react_auth.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .HasConstraintName("FK_Products_Categories");
+
+                    b.HasOne("aspnetcore_react_auth.Models.Company", "Company")
+                        .WithMany("Products")
+                        .HasForeignKey("CompanyId")
+                        .IsRequired()
+                        .HasConstraintName("fk_products_companies1");
 
                     b.HasOne("aspnetcore_react_auth.Models.Supplier", "Supplier")
                         .WithMany("Products")
@@ -1084,7 +839,31 @@ namespace aspnetcore_react_auth.Migrations
 
                     b.Navigation("Category");
 
+                    b.Navigation("Company");
+
                     b.Navigation("Supplier");
+                });
+
+            modelBuilder.Entity("aspnetcore_react_auth.Models.Supplier", b =>
+                {
+                    b.HasOne("aspnetcore_react_auth.Models.Company", "Company")
+                        .WithMany("Suppliers")
+                        .HasForeignKey("CompanyId")
+                        .IsRequired()
+                        .HasConstraintName("fk_suppliers_companies1");
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("aspnetcore_react_auth.Models.Warehouse", b =>
+                {
+                    b.HasOne("aspnetcore_react_auth.Models.Company", "Company")
+                        .WithMany("Warehouses")
+                        .HasForeignKey("CompanyId")
+                        .IsRequired()
+                        .HasConstraintName("fk_warehouses_companies1");
+
+                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("aspnetcore_react_auth.Models.Warehouseproduct", b =>
@@ -1104,21 +883,6 @@ namespace aspnetcore_react_auth.Migrations
                     b.Navigation("Product");
 
                     b.Navigation("Warehouse");
-                });
-
-            modelBuilder.Entity("Customercustomerdemo", b =>
-                {
-                    b.HasOne("aspnetcore_react_auth.Models.Customer", null)
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .IsRequired()
-                        .HasConstraintName("FK_CustomerCustomerDemo_Customers");
-
-                    b.HasOne("aspnetcore_react_auth.Models.Customerdemographic", null)
-                        .WithMany()
-                        .HasForeignKey("CustomerTypeId")
-                        .IsRequired()
-                        .HasConstraintName("FK_CustomerCustomerDemo");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1177,16 +941,26 @@ namespace aspnetcore_react_auth.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("aspnetcore_react_auth.Models.Customer", b =>
+            modelBuilder.Entity("aspnetcore_react_auth.Models.Company", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("Categories");
+
+                    b.Navigation("Employees");
+
+                    b.Navigation("Movements");
+
+                    b.Navigation("Products");
+
+                    b.Navigation("Suppliers");
+
+                    b.Navigation("Warehouses");
                 });
 
             modelBuilder.Entity("aspnetcore_react_auth.Models.Employee", b =>
                 {
                     b.Navigation("InverseReportsToNavigation");
 
-                    b.Navigation("Orders");
+                    b.Navigation("Movements");
                 });
 
             modelBuilder.Entity("aspnetcore_react_auth.Models.Movement", b =>
@@ -1194,23 +968,11 @@ namespace aspnetcore_react_auth.Migrations
                     b.Navigation("Movementdetails");
                 });
 
-            modelBuilder.Entity("aspnetcore_react_auth.Models.Order", b =>
-                {
-                    b.Navigation("Orderdetails");
-                });
-
             modelBuilder.Entity("aspnetcore_react_auth.Models.Product", b =>
                 {
                     b.Navigation("Movementdetails");
 
-                    b.Navigation("Orderdetails");
-
                     b.Navigation("Warehouseproducts");
-                });
-
-            modelBuilder.Entity("aspnetcore_react_auth.Models.Shipper", b =>
-                {
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("aspnetcore_react_auth.Models.Supplier", b =>

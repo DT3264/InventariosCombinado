@@ -29,7 +29,11 @@ namespace aspnetcore_react_auth.Models
         /// Es obligatorio en caso de los movimientos por ajuste, es posible que para algún otro movimiento se use este campo para capturar algún comentario u observación importante
         /// </summary>
         public string? Notes { get; set; }
+        public int CompanyId { get; set; }
+        public int EmployeeId { get; set; }
 
+        public virtual Company Company { get; set; } = null!;
+        public virtual Employee Employee { get; set; } = null!;
         public virtual Warehouse OriginWarehouse { get; set; } = null!;
         public virtual Supplier? Supplier { get; set; }
         public virtual Warehouse? TargetWarehouse { get; set; }

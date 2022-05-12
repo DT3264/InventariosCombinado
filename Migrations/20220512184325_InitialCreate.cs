@@ -70,92 +70,24 @@ namespace aspnetcore_react_auth.Migrations
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
             migrationBuilder.CreateTable(
-                name: "categories",
+                name: "companies",
                 columns: table => new
                 {
-                    CategoryID = table.Column<int>(type: "int", nullable: false)
+                    CompanyID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CategoryName = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false, collation: "utf8_general_ci")
+                    CompanyName = table.Column<string>(type: "varchar(70)", maxLength: 70, nullable: false, collation: "utf8_general_ci")
                         .Annotation("MySql:CharSet", "utf8"),
-                    Description = table.Column<string>(type: "longtext", nullable: true, collation: "utf8_general_ci")
+                    AccountEmail = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false, collation: "utf8_general_ci")
                         .Annotation("MySql:CharSet", "utf8"),
-                    Picture = table.Column<byte[]>(type: "longblob", nullable: true)
+                    Password = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false, collation: "utf8_general_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    BeginPlan = table.Column<DateOnly>(type: "date", nullable: false),
+                    EndPlan = table.Column<DateOnly>(type: "date", nullable: false),
+                    Active = table.Column<sbyte>(type: "tinyint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_categories", x => x.CategoryID);
-                })
-                .Annotation("MySql:CharSet", "utf8")
-                .Annotation("Relational:Collation", "utf8_general_ci");
-
-            migrationBuilder.CreateTable(
-                name: "comentarios",
-                columns: table => new
-                {
-                    id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    comentario = table.Column<string>(type: "text", nullable: false, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    fecha = table.Column<DateOnly>(type: "date", nullable: false),
-                    bloqueado = table.Column<sbyte>(type: "tinyint", nullable: true, defaultValueSql: "'0'")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_comentarios", x => x.id);
-                })
-                .Annotation("MySql:CharSet", "utf8")
-                .Annotation("Relational:Collation", "utf8_general_ci");
-
-            migrationBuilder.CreateTable(
-                name: "customerdemographics",
-                columns: table => new
-                {
-                    CustomerTypeID = table.Column<string>(type: "char(10)", fixedLength: true, maxLength: 10, nullable: false, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    CustomerDesc = table.Column<string>(type: "longtext", nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PRIMARY", x => x.CustomerTypeID);
-                })
-                .Annotation("MySql:CharSet", "utf8")
-                .Annotation("Relational:Collation", "utf8_general_ci");
-
-            migrationBuilder.CreateTable(
-                name: "customers",
-                columns: table => new
-                {
-                    CustomerID = table.Column<string>(type: "char(5)", fixedLength: true, maxLength: 5, nullable: false, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    CompanyName = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    ContactName = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    ContactTitle = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Address = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    City = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Region = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    PostalCode = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Country = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Phone = table.Column<string>(type: "varchar(24)", maxLength: 24, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Fax = table.Column<string>(type: "varchar(24)", maxLength: 24, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    email = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    password = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_customers", x => x.CustomerID);
+                    table.PrimaryKey("PK_companies", x => x.CompanyID);
                 })
                 .Annotation("MySql:CharSet", "utf8")
                 .Annotation("Relational:Collation", "utf8_general_ci");
@@ -184,59 +116,6 @@ namespace aspnetcore_react_auth.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DeviceCodes", x => x.UserCode);
-                })
-                .Annotation("MySql:CharSet", "utf8")
-                .Annotation("Relational:Collation", "utf8_general_ci");
-
-            migrationBuilder.CreateTable(
-                name: "employees",
-                columns: table => new
-                {
-                    EmployeeID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    LastName = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    FirstName = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Title = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    TitleOfCourtesy = table.Column<string>(type: "varchar(25)", maxLength: 25, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    BirthDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    HireDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    Address = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    City = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Region = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    PostalCode = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Country = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    HomePhone = table.Column<string>(type: "varchar(24)", maxLength: 24, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Extension = table.Column<string>(type: "varchar(4)", maxLength: 4, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Photo = table.Column<byte[]>(type: "longblob", nullable: true),
-                    Notes = table.Column<string>(type: "longtext", nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    ReportsTo = table.Column<int>(type: "int", nullable: true),
-                    PhotoPath = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    email = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    password = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_employees", x => x.EmployeeID);
-                    table.ForeignKey(
-                        name: "FK_Employees_Employees",
-                        column: x => x.ReportsTo,
-                        principalTable: "employees",
-                        principalColumn: "EmployeeID");
                 })
                 .Annotation("MySql:CharSet", "utf8")
                 .Annotation("Relational:Collation", "utf8_general_ci");
@@ -290,78 +169,6 @@ namespace aspnetcore_react_auth.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PersistedGrants", x => x.Key);
-                })
-                .Annotation("MySql:CharSet", "utf8")
-                .Annotation("Relational:Collation", "utf8_general_ci");
-
-            migrationBuilder.CreateTable(
-                name: "shippers",
-                columns: table => new
-                {
-                    ShipperID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CompanyName = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Phone = table.Column<string>(type: "varchar(24)", maxLength: 24, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_shippers", x => x.ShipperID);
-                })
-                .Annotation("MySql:CharSet", "utf8")
-                .Annotation("Relational:Collation", "utf8_general_ci");
-
-            migrationBuilder.CreateTable(
-                name: "suppliers",
-                columns: table => new
-                {
-                    SupplierID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CompanyName = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    ContactName = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    ContactTitle = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Address = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    City = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Region = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    PostalCode = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Country = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Phone = table.Column<string>(type: "varchar(24)", maxLength: 24, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Fax = table.Column<string>(type: "varchar(24)", maxLength: 24, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    HomePage = table.Column<string>(type: "longtext", nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_suppliers", x => x.SupplierID);
-                })
-                .Annotation("MySql:CharSet", "utf8")
-                .Annotation("Relational:Collation", "utf8_general_ci");
-
-            migrationBuilder.CreateTable(
-                name: "warehouses",
-                columns: table => new
-                {
-                    WarehouseID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Description = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8"),
-                    Address = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_warehouses", x => x.WarehouseID);
                 })
                 .Annotation("MySql:CharSet", "utf8")
                 .Annotation("Relational:Collation", "utf8_general_ci");
@@ -499,77 +306,123 @@ namespace aspnetcore_react_auth.Migrations
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
             migrationBuilder.CreateTable(
-                name: "customercustomerdemo",
+                name: "categories",
                 columns: table => new
                 {
-                    CustomerID = table.Column<string>(type: "char(5)", fixedLength: true, maxLength: 5, nullable: false, collation: "utf8_general_ci")
+                    CategoryID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CategoryName = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: false, collation: "utf8_general_ci")
                         .Annotation("MySql:CharSet", "utf8"),
-                    CustomerTypeID = table.Column<string>(type: "char(10)", fixedLength: true, maxLength: 10, nullable: false, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8")
+                    Description = table.Column<string>(type: "longtext", nullable: true, collation: "utf8_general_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Picture = table.Column<byte[]>(type: "longblob", nullable: true),
+                    CompanyID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PRIMARY", x => new { x.CustomerID, x.CustomerTypeID })
-                        .Annotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+                    table.PrimaryKey("PK_categories", x => x.CategoryID);
                     table.ForeignKey(
-                        name: "FK_CustomerCustomerDemo",
-                        column: x => x.CustomerTypeID,
-                        principalTable: "customerdemographics",
-                        principalColumn: "CustomerTypeID");
-                    table.ForeignKey(
-                        name: "FK_CustomerCustomerDemo_Customers",
-                        column: x => x.CustomerID,
-                        principalTable: "customers",
-                        principalColumn: "CustomerID");
+                        name: "fk_categories_companies1",
+                        column: x => x.CompanyID,
+                        principalTable: "companies",
+                        principalColumn: "CompanyID");
                 })
                 .Annotation("MySql:CharSet", "utf8")
                 .Annotation("Relational:Collation", "utf8_general_ci");
 
             migrationBuilder.CreateTable(
-                name: "orders",
+                name: "employees",
                 columns: table => new
                 {
-                    OrderID = table.Column<int>(type: "int", nullable: false)
+                    EmployeeID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    CustomerID = table.Column<string>(type: "char(5)", fixedLength: true, maxLength: 5, nullable: true, collation: "utf8_general_ci")
+                    LastName = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false, collation: "utf8_general_ci")
                         .Annotation("MySql:CharSet", "utf8"),
-                    EmployeeID = table.Column<int>(type: "int", nullable: true),
-                    OrderDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    RequiredDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    ShippedDate = table.Column<DateTime>(type: "datetime", nullable: true),
-                    ShipVia = table.Column<int>(type: "int", nullable: true),
-                    Freight = table.Column<double>(type: "double", nullable: true, defaultValueSql: "'0'"),
-                    ShipName = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true, collation: "utf8_general_ci")
+                    FirstName = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false, collation: "utf8_general_ci")
                         .Annotation("MySql:CharSet", "utf8"),
-                    ShipAddress = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: true, collation: "utf8_general_ci")
+                    HireDate = table.Column<DateTime>(type: "datetime", nullable: true),
+                    Address = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: true, collation: "utf8_general_ci")
                         .Annotation("MySql:CharSet", "utf8"),
-                    ShipCity = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true, collation: "utf8_general_ci")
+                    HomePhone = table.Column<string>(type: "varchar(24)", maxLength: 24, nullable: true, collation: "utf8_general_ci")
                         .Annotation("MySql:CharSet", "utf8"),
-                    ShipRegion = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true, collation: "utf8_general_ci")
+                    ReportsTo = table.Column<int>(type: "int", nullable: true),
+                    Email = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true, collation: "utf8_general_ci")
                         .Annotation("MySql:CharSet", "utf8"),
-                    ShipPostalCode = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true, collation: "utf8_general_ci")
+                    Password = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: true, collation: "utf8_general_ci")
                         .Annotation("MySql:CharSet", "utf8"),
-                    ShipCountry = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8")
+                    CompanyID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_orders", x => x.OrderID);
+                    table.PrimaryKey("PK_employees", x => x.EmployeeID);
                     table.ForeignKey(
-                        name: "FK_Orders_Customers",
-                        column: x => x.CustomerID,
-                        principalTable: "customers",
-                        principalColumn: "CustomerID");
+                        name: "fk_employees_companies1",
+                        column: x => x.CompanyID,
+                        principalTable: "companies",
+                        principalColumn: "CompanyID");
                     table.ForeignKey(
-                        name: "FK_Orders_Employees",
-                        column: x => x.EmployeeID,
+                        name: "FK_Employees_Employees",
+                        column: x => x.ReportsTo,
                         principalTable: "employees",
                         principalColumn: "EmployeeID");
+                })
+                .Annotation("MySql:CharSet", "utf8")
+                .Annotation("Relational:Collation", "utf8_general_ci");
+
+            migrationBuilder.CreateTable(
+                name: "suppliers",
+                columns: table => new
+                {
+                    SupplierID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    CompanyName = table.Column<string>(type: "varchar(40)", maxLength: 40, nullable: false, collation: "utf8_general_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    ContactName = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: true, collation: "utf8_general_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Address = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: true, collation: "utf8_general_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    City = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true, collation: "utf8_general_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    PostalCode = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true, collation: "utf8_general_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Country = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true, collation: "utf8_general_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Phone = table.Column<string>(type: "varchar(24)", maxLength: 24, nullable: true, collation: "utf8_general_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CompanyID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_suppliers", x => x.SupplierID);
                     table.ForeignKey(
-                        name: "FK_Orders_Shippers",
-                        column: x => x.ShipVia,
-                        principalTable: "shippers",
-                        principalColumn: "ShipperID");
+                        name: "fk_suppliers_companies1",
+                        column: x => x.CompanyID,
+                        principalTable: "companies",
+                        principalColumn: "CompanyID");
+                })
+                .Annotation("MySql:CharSet", "utf8")
+                .Annotation("Relational:Collation", "utf8_general_ci");
+
+            migrationBuilder.CreateTable(
+                name: "warehouses",
+                columns: table => new
+                {
+                    WarehouseID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    Description = table.Column<string>(type: "varchar(45)", maxLength: 45, nullable: false, collation: "utf8_general_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    Address = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true, collation: "utf8_general_ci")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CompanyID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_warehouses", x => x.WarehouseID);
+                    table.ForeignKey(
+                        name: "fk_warehouses_companies1",
+                        column: x => x.CompanyID,
+                        principalTable: "companies",
+                        principalColumn: "CompanyID");
                 })
                 .Annotation("MySql:CharSet", "utf8")
                 .Annotation("Relational:Collation", "utf8_general_ci");
@@ -588,7 +441,8 @@ namespace aspnetcore_react_auth.Migrations
                         .Annotation("MySql:CharSet", "utf8"),
                     UnitPrice = table.Column<double>(type: "double", nullable: true, defaultValueSql: "'0'"),
                     PhotoPath = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true, collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CompanyID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -598,6 +452,11 @@ namespace aspnetcore_react_auth.Migrations
                         column: x => x.CategoryID,
                         principalTable: "categories",
                         principalColumn: "CategoryID");
+                    table.ForeignKey(
+                        name: "fk_products_companies1",
+                        column: x => x.CompanyID,
+                        principalTable: "companies",
+                        principalColumn: "CompanyID");
                     table.ForeignKey(
                         name: "FK_Products_Suppliers",
                         column: x => x.SupplierID,
@@ -620,11 +479,23 @@ namespace aspnetcore_react_auth.Migrations
                     Type = table.Column<string>(type: "enum('COMPRA','TRASPASO','AJUSTE','VENTA')", nullable: false, collation: "utf8_general_ci")
                         .Annotation("MySql:CharSet", "utf8"),
                     Notes = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true, comment: "Es obligatorio en caso de los movimientos por ajuste, es posible que para algún otro movimiento se use este campo para capturar algún comentario u observación importante", collation: "utf8_general_ci")
-                        .Annotation("MySql:CharSet", "utf8")
+                        .Annotation("MySql:CharSet", "utf8"),
+                    CompanyID = table.Column<int>(type: "int", nullable: false),
+                    EmployeeID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_movements", x => x.MovementID);
+                    table.ForeignKey(
+                        name: "fk_movements_companies1",
+                        column: x => x.CompanyID,
+                        principalTable: "companies",
+                        principalColumn: "CompanyID");
+                    table.ForeignKey(
+                        name: "fk_movements_employees1",
+                        column: x => x.EmployeeID,
+                        principalTable: "employees",
+                        principalColumn: "EmployeeID");
                     table.ForeignKey(
                         name: "fk_Movimientos_suppliers1",
                         column: x => x.SupplierID,
@@ -640,34 +511,6 @@ namespace aspnetcore_react_auth.Migrations
                         column: x => x.TargetWarehouseID,
                         principalTable: "warehouses",
                         principalColumn: "WarehouseID");
-                })
-                .Annotation("MySql:CharSet", "utf8")
-                .Annotation("Relational:Collation", "utf8_general_ci");
-
-            migrationBuilder.CreateTable(
-                name: "orderdetails",
-                columns: table => new
-                {
-                    OrderID = table.Column<int>(type: "int", nullable: false),
-                    ProductID = table.Column<int>(type: "int", nullable: false),
-                    UnitPrice = table.Column<double>(type: "double", nullable: false),
-                    Quantity = table.Column<short>(type: "smallint", nullable: false),
-                    Discount = table.Column<double>(type: "double", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PRIMARY", x => new { x.OrderID, x.ProductID })
-                        .Annotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-                    table.ForeignKey(
-                        name: "FK_Order_Details_Orders",
-                        column: x => x.OrderID,
-                        principalTable: "orders",
-                        principalColumn: "OrderID");
-                    table.ForeignKey(
-                        name: "FK_Order_Details_Products",
-                        column: x => x.ProductID,
-                        principalTable: "products",
-                        principalColumn: "ProductID");
                 })
                 .Annotation("MySql:CharSet", "utf8")
                 .Annotation("Relational:Collation", "utf8_general_ci");
@@ -770,34 +613,21 @@ namespace aspnetcore_react_auth.Migrations
                 column: "CategoryName");
 
             migrationBuilder.CreateIndex(
-                name: "FK_CustomerCustomerDemo",
-                table: "customercustomerdemo",
-                column: "CustomerTypeID");
+                name: "fk_categories_companies1_idx",
+                table: "categories",
+                column: "CompanyID");
 
             migrationBuilder.CreateIndex(
-                name: "FK_CustomerCustomerDemo_Customers",
-                table: "customercustomerdemo",
-                column: "CustomerID");
+                name: "AccountEmail_UNIQUE",
+                table: "companies",
+                column: "AccountEmail",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "Customers_City",
-                table: "customers",
-                column: "City");
-
-            migrationBuilder.CreateIndex(
-                name: "Customers_CompanyName",
-                table: "customers",
-                column: "CompanyName");
-
-            migrationBuilder.CreateIndex(
-                name: "Customers_PostalCode",
-                table: "customers",
-                column: "PostalCode");
-
-            migrationBuilder.CreateIndex(
-                name: "Customers_Region",
-                table: "customers",
-                column: "Region");
+                name: "CompanyName_UNIQUE",
+                table: "companies",
+                column: "CompanyName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_DeviceCodes_DeviceCode",
@@ -816,9 +646,9 @@ namespace aspnetcore_react_auth.Migrations
                 column: "LastName");
 
             migrationBuilder.CreateIndex(
-                name: "Employees_PostalCode",
+                name: "fk_employees_companies1_idx",
                 table: "employees",
-                column: "PostalCode");
+                column: "CompanyID");
 
             migrationBuilder.CreateIndex(
                 name: "FK_Employees_Employees",
@@ -828,7 +658,7 @@ namespace aspnetcore_react_auth.Migrations
             migrationBuilder.CreateIndex(
                 name: "UQ_Email",
                 table: "employees",
-                column: "email",
+                column: "Email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -847,6 +677,16 @@ namespace aspnetcore_react_auth.Migrations
                 column: "ProductID");
 
             migrationBuilder.CreateIndex(
+                name: "fk_movements_companies1_idx",
+                table: "movements",
+                column: "CompanyID");
+
+            migrationBuilder.CreateIndex(
+                name: "fk_movements_employees1_idx",
+                table: "movements",
+                column: "EmployeeID");
+
+            migrationBuilder.CreateIndex(
                 name: "fk_Movimientos_suppliers1_idx",
                 table: "movements",
                 column: "SupplierID");
@@ -860,46 +700,6 @@ namespace aspnetcore_react_auth.Migrations
                 name: "fk_Movimientos_warehouses2_idx",
                 table: "movements",
                 column: "TargetWarehouseID");
-
-            migrationBuilder.CreateIndex(
-                name: "OrderDetails_OrderID",
-                table: "orderdetails",
-                column: "OrderID");
-
-            migrationBuilder.CreateIndex(
-                name: "OrderDetails_ProductID",
-                table: "orderdetails",
-                column: "ProductID");
-
-            migrationBuilder.CreateIndex(
-                name: "FK_Orders_Customers",
-                table: "orders",
-                column: "CustomerID");
-
-            migrationBuilder.CreateIndex(
-                name: "Orders_EmployeeID",
-                table: "orders",
-                column: "EmployeeID");
-
-            migrationBuilder.CreateIndex(
-                name: "Orders_OrderDate",
-                table: "orders",
-                column: "OrderDate");
-
-            migrationBuilder.CreateIndex(
-                name: "Orders_ShippedDate",
-                table: "orders",
-                column: "ShippedDate");
-
-            migrationBuilder.CreateIndex(
-                name: "Orders_ShippersOrders",
-                table: "orders",
-                column: "ShipVia");
-
-            migrationBuilder.CreateIndex(
-                name: "Orders_ShipPostalCode",
-                table: "orders",
-                column: "ShipPostalCode");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PersistedGrants_ConsumedTime",
@@ -922,6 +722,11 @@ namespace aspnetcore_react_auth.Migrations
                 columns: new[] { "SubjectId", "SessionId", "Type" });
 
             migrationBuilder.CreateIndex(
+                name: "fk_products_companies1_idx",
+                table: "products",
+                column: "CompanyID");
+
+            migrationBuilder.CreateIndex(
                 name: "Products_CategoriesProducts",
                 table: "products",
                 column: "CategoryID");
@@ -937,6 +742,11 @@ namespace aspnetcore_react_auth.Migrations
                 column: "SupplierID");
 
             migrationBuilder.CreateIndex(
+                name: "fk_suppliers_companies1_idx",
+                table: "suppliers",
+                column: "CompanyID");
+
+            migrationBuilder.CreateIndex(
                 name: "Suppliers_CompanyName",
                 table: "suppliers",
                 column: "CompanyName");
@@ -950,6 +760,11 @@ namespace aspnetcore_react_auth.Migrations
                 name: "fk_WarehouseProducts_products1_idx",
                 table: "warehouseproducts",
                 column: "ProductID");
+
+            migrationBuilder.CreateIndex(
+                name: "fk_warehouses_companies1_idx",
+                table: "warehouses",
+                column: "CompanyID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -970,12 +785,6 @@ namespace aspnetcore_react_auth.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "comentarios");
-
-            migrationBuilder.DropTable(
-                name: "customercustomerdemo");
-
-            migrationBuilder.DropTable(
                 name: "DeviceCodes");
 
             migrationBuilder.DropTable(
@@ -983,9 +792,6 @@ namespace aspnetcore_react_auth.Migrations
 
             migrationBuilder.DropTable(
                 name: "movementdetails");
-
-            migrationBuilder.DropTable(
-                name: "orderdetails");
 
             migrationBuilder.DropTable(
                 name: "PersistedGrants");
@@ -1000,34 +806,25 @@ namespace aspnetcore_react_auth.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "customerdemographics");
-
-            migrationBuilder.DropTable(
                 name: "movements");
-
-            migrationBuilder.DropTable(
-                name: "orders");
 
             migrationBuilder.DropTable(
                 name: "products");
 
             migrationBuilder.DropTable(
-                name: "warehouses");
-
-            migrationBuilder.DropTable(
-                name: "customers");
-
-            migrationBuilder.DropTable(
                 name: "employees");
 
             migrationBuilder.DropTable(
-                name: "shippers");
+                name: "warehouses");
 
             migrationBuilder.DropTable(
                 name: "categories");
 
             migrationBuilder.DropTable(
                 name: "suppliers");
+
+            migrationBuilder.DropTable(
+                name: "companies");
         }
     }
 }

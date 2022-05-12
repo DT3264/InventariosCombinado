@@ -1,33 +1,29 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using aspnetcore_react_auth.Models;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.Extensions.Options;
 using Duende.IdentityServer.EntityFramework.Options;
 
-// namespace aspnetcore_react_auth.Models
 namespace aspnetcore_react_auth.Data
 {
     public partial class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     {
         //dotnet ef migrations add InitialCreate --context ApplicationDbContext
         //dotnet ef database update --context ApplicationDbContext
-
         public ApplicationDbContext(DbContextOptions options, IOptions<OperationalStoreOptions> operationalStoreOptions)
             : base(options, operationalStoreOptions)
         {
         }
 
         public virtual DbSet<Category> Categories { get; set; } = null!;
-        public virtual DbSet<Comentario> Comentarios { get; set; } = null!;
-        public virtual DbSet<Customer> Customers { get; set; } = null!;
-        public virtual DbSet<Customerdemographic> Customerdemographics { get; set; } = null!;
+        public virtual DbSet<Company> Companies { get; set; } = null!;
         public virtual DbSet<Employee> Employees { get; set; } = null!;
         public virtual DbSet<Movement> Movements { get; set; } = null!;
         public virtual DbSet<Movementdetail> Movementdetails { get; set; } = null!;
-        public virtual DbSet<Order> Orders { get; set; } = null!;
-        public virtual DbSet<Orderdetail> Orderdetails { get; set; } = null!;
         public virtual DbSet<Product> Products { get; set; } = null!;
-        public virtual DbSet<Shipper> Shippers { get; set; } = null!;
         public virtual DbSet<Supplier> Suppliers { get; set; } = null!;
         public virtual DbSet<Warehouse> Warehouses { get; set; } = null!;
         public virtual DbSet<Warehouseproduct> Warehouseproducts { get; set; } = null!;
@@ -36,14 +32,14 @@ namespace aspnetcore_react_auth.Data
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=0000;database=inventario", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.26-mysql"));
+                optionsBuilder.UseMySql("server=localhost;port=3306;user=root;password=0000;database=northwind", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.0.26-mysql"));
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
 
+            base.OnModelCreating(modelBuilder);
             modelBuilder.UseCollation("utf8_general_ci")
                 .HasCharSet("utf8");
 
@@ -53,106 +49,38 @@ namespace aspnetcore_react_auth.Data
 
                 entity.HasIndex(e => e.CategoryName, "Categories_CategoryName");
 
+                entity.HasIndex(e => e.CompanyId, "fk_categories_companies1_idx");
+
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
                 entity.Property(e => e.CategoryName).HasMaxLength(15);
+
+                entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+
+                entity.HasOne(d => d.Company)
+                    .WithMany(p => p.Categories)
+                    .HasForeignKey(d => d.CompanyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_categories_companies1");
             });
 
-            modelBuilder.Entity<Comentario>(entity =>
+            modelBuilder.Entity<Company>(entity =>
             {
-                entity.ToTable("comentarios");
+                entity.ToTable("companies");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.HasIndex(e => e.AccountEmail, "AccountEmail_UNIQUE")
+                    .IsUnique();
 
-                entity.Property(e => e.Bloqueado)
-                    .HasColumnName("bloqueado")
-                    .HasDefaultValueSql("'0'");
+                entity.HasIndex(e => e.CompanyName, "CompanyName_UNIQUE")
+                    .IsUnique();
 
-                entity.Property(e => e.Comentario1)
-                    .HasColumnType("text")
-                    .HasColumnName("comentario");
+                entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
 
-                entity.Property(e => e.Fecha).HasColumnName("fecha");
-            });
+                entity.Property(e => e.AccountEmail).HasMaxLength(100);
 
-            modelBuilder.Entity<Customer>(entity =>
-            {
-                entity.ToTable("customers");
+                entity.Property(e => e.CompanyName).HasMaxLength(70);
 
-                entity.HasIndex(e => e.City, "Customers_City");
-
-                entity.HasIndex(e => e.CompanyName, "Customers_CompanyName");
-
-                entity.HasIndex(e => e.PostalCode, "Customers_PostalCode");
-
-                entity.HasIndex(e => e.Region, "Customers_Region");
-
-                entity.Property(e => e.CustomerId)
-                    .HasMaxLength(5)
-                    .HasColumnName("CustomerID")
-                    .IsFixedLength();
-
-                entity.Property(e => e.Address).HasMaxLength(60);
-
-                entity.Property(e => e.City).HasMaxLength(15);
-
-                entity.Property(e => e.CompanyName).HasMaxLength(40);
-
-                entity.Property(e => e.ContactName).HasMaxLength(30);
-
-                entity.Property(e => e.ContactTitle).HasMaxLength(30);
-
-                entity.Property(e => e.Country).HasMaxLength(15);
-
-                entity.Property(e => e.Email)
-                    .HasMaxLength(50)
-                    .HasColumnName("email");
-
-                entity.Property(e => e.Fax).HasMaxLength(24);
-
-                entity.Property(e => e.Password)
-                    .HasMaxLength(50)
-                    .HasColumnName("password");
-
-                entity.Property(e => e.Phone).HasMaxLength(24);
-
-                entity.Property(e => e.PostalCode).HasMaxLength(10);
-
-                entity.Property(e => e.Region).HasMaxLength(15);
-
-                entity.HasMany(d => d.CustomerTypes)
-                    .WithMany(p => p.Customers)
-                    .UsingEntity<Dictionary<string, object>>(
-                        "Customercustomerdemo",
-                        l => l.HasOne<Customerdemographic>().WithMany().HasForeignKey("CustomerTypeId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_CustomerCustomerDemo"),
-                        r => r.HasOne<Customer>().WithMany().HasForeignKey("CustomerId").OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_CustomerCustomerDemo_Customers"),
-                        j =>
-                        {
-                            j.HasKey("CustomerId", "CustomerTypeId").HasName("PRIMARY").HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-
-                            j.ToTable("customercustomerdemo");
-
-                            j.HasIndex(new[] { "CustomerTypeId" }, "FK_CustomerCustomerDemo");
-
-                            j.HasIndex(new[] { "CustomerId" }, "FK_CustomerCustomerDemo_Customers");
-
-                            j.IndexerProperty<string>("CustomerId").HasMaxLength(5).HasColumnName("CustomerID").IsFixedLength();
-
-                            j.IndexerProperty<string>("CustomerTypeId").HasMaxLength(10).HasColumnName("CustomerTypeID").IsFixedLength();
-                        });
-            });
-
-            modelBuilder.Entity<Customerdemographic>(entity =>
-            {
-                entity.HasKey(e => e.CustomerTypeId)
-                    .HasName("PRIMARY");
-
-                entity.ToTable("customerdemographics");
-
-                entity.Property(e => e.CustomerTypeId)
-                    .HasMaxLength(10)
-                    .HasColumnName("CustomerTypeID")
-                    .IsFixedLength();
+                entity.Property(e => e.Password).HasMaxLength(40);
             });
 
             modelBuilder.Entity<Employee>(entity =>
@@ -161,28 +89,20 @@ namespace aspnetcore_react_auth.Data
 
                 entity.HasIndex(e => e.LastName, "Employees_LastName");
 
-                entity.HasIndex(e => e.PostalCode, "Employees_PostalCode");
-
                 entity.HasIndex(e => e.ReportsTo, "FK_Employees_Employees");
 
                 entity.HasIndex(e => e.Email, "UQ_Email")
                     .IsUnique();
 
+                entity.HasIndex(e => e.CompanyId, "fk_employees_companies1_idx");
+
                 entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
 
                 entity.Property(e => e.Address).HasMaxLength(60);
 
-                entity.Property(e => e.BirthDate).HasColumnType("datetime");
+                entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
 
-                entity.Property(e => e.City).HasMaxLength(15);
-
-                entity.Property(e => e.Country).HasMaxLength(15);
-
-                entity.Property(e => e.Email)
-                    .HasMaxLength(50)
-                    .HasColumnName("email");
-
-                entity.Property(e => e.Extension).HasMaxLength(4);
+                entity.Property(e => e.Email).HasMaxLength(100);
 
                 entity.Property(e => e.FirstName).HasMaxLength(10);
 
@@ -192,19 +112,13 @@ namespace aspnetcore_react_auth.Data
 
                 entity.Property(e => e.LastName).HasMaxLength(20);
 
-                entity.Property(e => e.Password)
-                    .HasMaxLength(50)
-                    .HasColumnName("password");
+                entity.Property(e => e.Password).HasMaxLength(40);
 
-                entity.Property(e => e.PhotoPath).HasMaxLength(255);
-
-                entity.Property(e => e.PostalCode).HasMaxLength(10);
-
-                entity.Property(e => e.Region).HasMaxLength(15);
-
-                entity.Property(e => e.Title).HasMaxLength(30);
-
-                entity.Property(e => e.TitleOfCourtesy).HasMaxLength(25);
+                entity.HasOne(d => d.Company)
+                    .WithMany(p => p.Employees)
+                    .HasForeignKey(d => d.CompanyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_employees_companies1");
 
                 entity.HasOne(d => d.ReportsToNavigation)
                     .WithMany(p => p.InverseReportsToNavigation)
@@ -222,9 +136,17 @@ namespace aspnetcore_react_auth.Data
 
                 entity.HasIndex(e => e.TargetWarehouseId, "fk_Movimientos_warehouses2_idx");
 
+                entity.HasIndex(e => e.CompanyId, "fk_movements_companies1_idx");
+
+                entity.HasIndex(e => e.EmployeeId, "fk_movements_employees1_idx");
+
                 entity.Property(e => e.MovementId).HasColumnName("MovementID");
 
+                entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+
                 entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
 
                 entity.Property(e => e.Notes)
                     .HasMaxLength(200)
@@ -243,6 +165,18 @@ namespace aspnetcore_react_auth.Data
                     .HasComment("Representa el almacen de de destino en el caso de ser un movimiento por traspaso");
 
                 entity.Property(e => e.Type).HasColumnType("enum('COMPRA','TRASPASO','AJUSTE','VENTA')");
+
+                entity.HasOne(d => d.Company)
+                    .WithMany(p => p.Movements)
+                    .HasForeignKey(d => d.CompanyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_movements_companies1");
+
+                entity.HasOne(d => d.Employee)
+                    .WithMany(p => p.Movements)
+                    .HasForeignKey(d => d.EmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_movements_employees1");
 
                 entity.HasOne(d => d.OriginWarehouse)
                     .WithMany(p => p.MovementOriginWarehouses)
@@ -292,96 +226,6 @@ namespace aspnetcore_react_auth.Data
                     .HasConstraintName("fk_DetallesMovimientos_products1");
             });
 
-            modelBuilder.Entity<Order>(entity =>
-            {
-                entity.ToTable("orders");
-
-                entity.HasIndex(e => e.CustomerId, "FK_Orders_Customers");
-
-                entity.HasIndex(e => e.EmployeeId, "Orders_EmployeeID");
-
-                entity.HasIndex(e => e.OrderDate, "Orders_OrderDate");
-
-                entity.HasIndex(e => e.ShipPostalCode, "Orders_ShipPostalCode");
-
-                entity.HasIndex(e => e.ShippedDate, "Orders_ShippedDate");
-
-                entity.HasIndex(e => e.ShipVia, "Orders_ShippersOrders");
-
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
-
-                entity.Property(e => e.CustomerId)
-                    .HasMaxLength(5)
-                    .HasColumnName("CustomerID")
-                    .IsFixedLength();
-
-                entity.Property(e => e.EmployeeId).HasColumnName("EmployeeID");
-
-                entity.Property(e => e.Freight).HasDefaultValueSql("'0'");
-
-                entity.Property(e => e.OrderDate).HasColumnType("datetime");
-
-                entity.Property(e => e.RequiredDate).HasColumnType("datetime");
-
-                entity.Property(e => e.ShipAddress).HasMaxLength(60);
-
-                entity.Property(e => e.ShipCity).HasMaxLength(15);
-
-                entity.Property(e => e.ShipCountry).HasMaxLength(15);
-
-                entity.Property(e => e.ShipName).HasMaxLength(40);
-
-                entity.Property(e => e.ShipPostalCode).HasMaxLength(10);
-
-                entity.Property(e => e.ShipRegion).HasMaxLength(15);
-
-                entity.Property(e => e.ShippedDate).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Customer)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.CustomerId)
-                    .HasConstraintName("FK_Orders_Customers");
-
-                entity.HasOne(d => d.Employee)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.EmployeeId)
-                    .HasConstraintName("FK_Orders_Employees");
-
-                entity.HasOne(d => d.ShipViaNavigation)
-                    .WithMany(p => p.Orders)
-                    .HasForeignKey(d => d.ShipVia)
-                    .HasConstraintName("FK_Orders_Shippers");
-            });
-
-            modelBuilder.Entity<Orderdetail>(entity =>
-            {
-                entity.HasKey(e => new { e.OrderId, e.ProductId })
-                    .HasName("PRIMARY")
-                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-
-                entity.ToTable("orderdetails");
-
-                entity.HasIndex(e => e.OrderId, "OrderDetails_OrderID");
-
-                entity.HasIndex(e => e.ProductId, "OrderDetails_ProductID");
-
-                entity.Property(e => e.OrderId).HasColumnName("OrderID");
-
-                entity.Property(e => e.ProductId).HasColumnName("ProductID");
-
-                entity.HasOne(d => d.Order)
-                    .WithMany(p => p.Orderdetails)
-                    .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Details_Orders");
-
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.Orderdetails)
-                    .HasForeignKey(d => d.ProductId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Details_Products");
-            });
-
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.ToTable("products");
@@ -392,9 +236,13 @@ namespace aspnetcore_react_auth.Data
 
                 entity.HasIndex(e => e.SupplierId, "Products_SupplierID");
 
+                entity.HasIndex(e => e.CompanyId, "fk_products_companies1_idx");
+
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
+
+                entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
 
                 entity.Property(e => e.PhotoPath).HasMaxLength(50);
 
@@ -411,21 +259,16 @@ namespace aspnetcore_react_auth.Data
                     .HasForeignKey(d => d.CategoryId)
                     .HasConstraintName("FK_Products_Categories");
 
+                entity.HasOne(d => d.Company)
+                    .WithMany(p => p.Products)
+                    .HasForeignKey(d => d.CompanyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_products_companies1");
+
                 entity.HasOne(d => d.Supplier)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.SupplierId)
                     .HasConstraintName("FK_Products_Suppliers");
-            });
-
-            modelBuilder.Entity<Shipper>(entity =>
-            {
-                entity.ToTable("shippers");
-
-                entity.Property(e => e.ShipperId).HasColumnName("ShipperID");
-
-                entity.Property(e => e.CompanyName).HasMaxLength(40);
-
-                entity.Property(e => e.Phone).HasMaxLength(24);
             });
 
             modelBuilder.Entity<Supplier>(entity =>
@@ -436,38 +279,52 @@ namespace aspnetcore_react_auth.Data
 
                 entity.HasIndex(e => e.PostalCode, "Suppliers_PostalCode");
 
+                entity.HasIndex(e => e.CompanyId, "fk_suppliers_companies1_idx");
+
                 entity.Property(e => e.SupplierId).HasColumnName("SupplierID");
 
                 entity.Property(e => e.Address).HasMaxLength(60);
 
                 entity.Property(e => e.City).HasMaxLength(15);
 
+                entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+
                 entity.Property(e => e.CompanyName).HasMaxLength(40);
 
                 entity.Property(e => e.ContactName).HasMaxLength(30);
 
-                entity.Property(e => e.ContactTitle).HasMaxLength(30);
-
                 entity.Property(e => e.Country).HasMaxLength(15);
-
-                entity.Property(e => e.Fax).HasMaxLength(24);
 
                 entity.Property(e => e.Phone).HasMaxLength(24);
 
                 entity.Property(e => e.PostalCode).HasMaxLength(10);
 
-                entity.Property(e => e.Region).HasMaxLength(15);
+                entity.HasOne(d => d.Company)
+                    .WithMany(p => p.Suppliers)
+                    .HasForeignKey(d => d.CompanyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_suppliers_companies1");
             });
 
             modelBuilder.Entity<Warehouse>(entity =>
             {
                 entity.ToTable("warehouses");
 
+                entity.HasIndex(e => e.CompanyId, "fk_warehouses_companies1_idx");
+
                 entity.Property(e => e.WarehouseId).HasColumnName("WarehouseID");
 
                 entity.Property(e => e.Address).HasMaxLength(100);
 
+                entity.Property(e => e.CompanyId).HasColumnName("CompanyID");
+
                 entity.Property(e => e.Description).HasMaxLength(45);
+
+                entity.HasOne(d => d.Company)
+                    .WithMany(p => p.Warehouses)
+                    .HasForeignKey(d => d.CompanyId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_warehouses_companies1");
             });
 
             modelBuilder.Entity<Warehouseproduct>(entity =>

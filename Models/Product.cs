@@ -8,7 +8,6 @@ namespace aspnetcore_react_auth.Models
         public Product()
         {
             Movementdetails = new HashSet<Movementdetail>();
-            Orderdetails = new HashSet<Orderdetail>();
             Warehouseproducts = new HashSet<Warehouseproduct>();
         }
 
@@ -19,11 +18,12 @@ namespace aspnetcore_react_auth.Models
         public string? QuantityPerUnit { get; set; }
         public double? UnitPrice { get; set; }
         public string? PhotoPath { get; set; }
+        public int CompanyId { get; set; }
 
         public virtual Category? Category { get; set; }
+        public virtual Company Company { get; set; } = null!;
         public virtual Supplier? Supplier { get; set; }
         public virtual ICollection<Movementdetail> Movementdetails { get; set; }
-        public virtual ICollection<Orderdetail> Orderdetails { get; set; }
         public virtual ICollection<Warehouseproduct> Warehouseproducts { get; set; }
     }
 }

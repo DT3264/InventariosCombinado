@@ -15,7 +15,9 @@ namespace aspnetcore_react_auth.Models
         public int WarehouseId { get; set; }
         public string Description { get; set; } = null!;
         public string? Address { get; set; }
+        public int CompanyId { get; set; }
 
+        public virtual Company Company { get; set; } = null!;
         public virtual ICollection<Movement> MovementOriginWarehouses { get; set; }
         public virtual ICollection<Movement> MovementTargetWarehouses { get; set; }
         public virtual ICollection<Warehouseproduct> Warehouseproducts { get; set; }
