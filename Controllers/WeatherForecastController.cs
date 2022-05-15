@@ -43,7 +43,8 @@ public class WeatherForecastController : ControllerBase
     {
         return _context.Employees
             .GroupBy(e => e.CompanyId)
-            .Select(e => new {
+            .Select(e => new
+            {
                 Company = e.Key,
                 Empleados = e.Count()
             });
@@ -52,6 +53,7 @@ public class WeatherForecastController : ControllerBase
 
     // GET: api/
     [HttpGet]
+    [Authorize(Policy = "RequireAdmin")]
     [Route("top5")]
     public IEnumerable<Object> GetTop5()
     {

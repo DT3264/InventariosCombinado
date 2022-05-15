@@ -7,7 +7,7 @@ export class FetchData extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { forecasts: [], loading: true };
+    this.state = { forecasts: [], isUserValid: false, loading: true };
   }
 
   componentDidMount() {
@@ -15,15 +15,31 @@ export class FetchData extends Component {
   }
 
   async populateWeatherData() {
+    authService.getUser().then((u) => {
+      console.log(u);
+      const valo = authService.isAdmin(u);
+      console.log(valo);
+      this.setState({ isUserValid: valo });
+    });
     const token = await authService.getAccessToken();
+    console.log(token);
     const response = await fetch("weatherforecast/top5", {
       headers: !token ? {} : { Authorization: `Bearer ${token}` },
     });
-    const data = await response.json();
-    this.setState({ forecasts: data, loading: false });
+    console.log(response);
+    if (response.status != 403) {
+      const data = await response.json();
+      this.setState({ forecasts: data, loading: false });
+    } else {
+      this.setState({ loading: false });
+      // console.log("Sin autorizacion");
+    }
   }
 
   static renderForecastsTable(data) {
+    if (!data.isUserValid) {
+      return <>Usuario no valido</>;
+    }
     console.log(data);
     var options = {
       title: "Ventas por persona",
@@ -31,7 +47,7 @@ export class FetchData extends Component {
       legend: { position: "none" },
     };
     var chartData = [["Empleado", "Ventas"]];
-    data.forEach((d) => chartData.push([d.empleado, d.ventas]));
+    data.forecasts.forEach((d) => chartData.push([d.empleado, d.ventas]));
     return (
       <Chart
         chartType="BarChart"
@@ -49,7 +65,7 @@ export class FetchData extends Component {
         <em>Loading...</em>
       </p>
     ) : (
-      FetchData.renderForecastsTable(this.state.forecasts)
+      FetchData.renderForecastsTable(this.state)
     );
 
     return (
