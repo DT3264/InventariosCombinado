@@ -24,7 +24,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>
-    (options => options.SignIn.RequireConfirmedAccount = true)
+    (options =>
+    {
+        options.SignIn.RequireConfirmedAccount = true;
+        options.Password.RequireDigit = false;
+        options.Password.RequiredLength = 1;
+        options.Password.RequiredUniqueChars = 0;
+        options.Password.RequireLowercase = false;
+        options.Password.RequireUppercase = false;
+        options.Password.RequireNonAlphanumeric = false;
+    })
          .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -83,7 +92,7 @@ using (var scope = app.Services.CreateScope())
 
     // var testUserPw = builder.Configuration.GetValue<string>("SeedUserPW");
 
-    await SeedData.Initialize(services, "T3stpass.");
+    await SeedData.Initialize(services);
 }
 
 // Configure the HTTP request pipeline.

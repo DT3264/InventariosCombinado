@@ -254,7 +254,7 @@ CREATE TABLE `categories` (
   PRIMARY KEY (`CategoryID`),
   KEY `Categories_CategoryName` (`CategoryName`),
   KEY `fk_categories_companies1_idx` (`CompanyID`),
-  CONSTRAINT `fk_categories_companies1` FOREIGN KEY (`CompanyID`) REFERENCES `companies` (`CompanyID`)
+  CONSTRAINT `fk_categories_companies1` FOREIGN KEY (`CompanyID`) REFERENCES `companies` (`CompanyID`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -354,8 +354,8 @@ CREATE TABLE `employees` (
   KEY `Employees_LastName` (`LastName`),
   KEY `FK_Employees_Employees` (`ReportsTo`),
   KEY `fk_employees_companies1_idx` (`CompanyID`),
-  CONSTRAINT `fk_employees_companies1` FOREIGN KEY (`CompanyID`) REFERENCES `companies` (`CompanyID`),
-  CONSTRAINT `FK_Employees_Employees` FOREIGN KEY (`ReportsTo`) REFERENCES `employees` (`EmployeeID`)
+  CONSTRAINT `fk_employees_companies1` FOREIGN KEY (`CompanyID`) REFERENCES `companies` (`CompanyID`) ON DELETE CASCADE,
+  CONSTRAINT `FK_Employees_Employees` FOREIGN KEY (`ReportsTo`) REFERENCES `employees` (`EmployeeID`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -413,8 +413,8 @@ CREATE TABLE `movementdetails` (
   PRIMARY KEY (`MovementID`,`ProductID`),
   KEY `fk_DetallesMovimientos_Movimientos1_idx` (`MovementID`),
   KEY `fk_DetallesMovimientos_products1_idx` (`ProductID`),
-  CONSTRAINT `fk_DetallesMovimientos_Movimientos1` FOREIGN KEY (`MovementID`) REFERENCES `movements` (`MovementID`),
-  CONSTRAINT `fk_DetallesMovimientos_products1` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`)
+  CONSTRAINT `fk_DetallesMovimientos_Movimientos1` FOREIGN KEY (`MovementID`) REFERENCES `movements` (`MovementID`) ON DELETE CASCADE,
+  CONSTRAINT `fk_DetallesMovimientos_products1` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -451,11 +451,11 @@ CREATE TABLE `movements` (
   KEY `fk_Movimientos_warehouses2_idx` (`TargetWarehouseID`),
   KEY `fk_movements_companies1_idx` (`CompanyID`),
   KEY `fk_movements_employees1_idx` (`EmployeeID`),
-  CONSTRAINT `fk_movements_companies1` FOREIGN KEY (`CompanyID`) REFERENCES `companies` (`CompanyID`),
-  CONSTRAINT `fk_movements_employees1` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`),
-  CONSTRAINT `fk_Movimientos_suppliers1` FOREIGN KEY (`SupplierID`) REFERENCES `suppliers` (`SupplierID`),
-  CONSTRAINT `fk_Movimientos_warehouses1` FOREIGN KEY (`OriginWarehouseID`) REFERENCES `warehouses` (`WarehouseID`),
-  CONSTRAINT `fk_Movimientos_warehouses2` FOREIGN KEY (`TargetWarehouseID`) REFERENCES `warehouses` (`WarehouseID`)
+  CONSTRAINT `fk_movements_companies1` FOREIGN KEY (`CompanyID`) REFERENCES `companies` (`CompanyID`) ON DELETE CASCADE,
+  CONSTRAINT `fk_movements_employees1` FOREIGN KEY (`EmployeeID`) REFERENCES `employees` (`EmployeeID`) ON DELETE CASCADE,
+  CONSTRAINT `fk_Movimientos_suppliers1` FOREIGN KEY (`SupplierID`) REFERENCES `suppliers` (`SupplierID`) ON DELETE CASCADE,
+  CONSTRAINT `fk_Movimientos_warehouses1` FOREIGN KEY (`OriginWarehouseID`) REFERENCES `warehouses` (`WarehouseID`) ON DELETE CASCADE,
+  CONSTRAINT `fk_Movimientos_warehouses2` FOREIGN KEY (`TargetWarehouseID`) REFERENCES `warehouses` (`WarehouseID`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4097 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -527,9 +527,9 @@ CREATE TABLE `products` (
   KEY `Products_SupplierID` (`SupplierID`),
   KEY `Products_SuppliersProducts` (`SupplierID`),
   KEY `fk_products_companies1_idx` (`CompanyID`),
-  CONSTRAINT `FK_Products_Categories` FOREIGN KEY (`CategoryID`) REFERENCES `categories` (`CategoryID`),
-  CONSTRAINT `fk_products_companies1` FOREIGN KEY (`CompanyID`) REFERENCES `companies` (`CompanyID`),
-  CONSTRAINT `FK_Products_Suppliers` FOREIGN KEY (`SupplierID`) REFERENCES `suppliers` (`SupplierID`)
+  CONSTRAINT `FK_Products_Categories` FOREIGN KEY (`CategoryID`) REFERENCES `categories` (`CategoryID`) ON DELETE CASCADE,
+  CONSTRAINT `fk_products_companies1` FOREIGN KEY (`CompanyID`) REFERENCES `companies` (`CompanyID`) ON DELETE CASCADE,
+  CONSTRAINT `FK_Products_Suppliers` FOREIGN KEY (`SupplierID`) REFERENCES `suppliers` (`SupplierID`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -564,7 +564,7 @@ CREATE TABLE `suppliers` (
   KEY `Suppliers_CompanyName` (`CompanyName`),
   KEY `Suppliers_PostalCode` (`PostalCode`),
   KEY `fk_suppliers_companies1_idx` (`CompanyID`),
-  CONSTRAINT `fk_suppliers_companies1` FOREIGN KEY (`CompanyID`) REFERENCES `companies` (`CompanyID`)
+  CONSTRAINT `fk_suppliers_companies1` FOREIGN KEY (`CompanyID`) REFERENCES `companies` (`CompanyID`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -594,8 +594,8 @@ CREATE TABLE `warehouseproducts` (
   `Discontinued` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`WarehouseID`,`ProductID`),
   KEY `fk_WarehouseProducts_products1_idx` (`ProductID`),
-  CONSTRAINT `fk_WarehouseProducts_products1` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`),
-  CONSTRAINT `fk_WarehouseProducts_warehouses` FOREIGN KEY (`WarehouseID`) REFERENCES `warehouses` (`WarehouseID`)
+  CONSTRAINT `fk_WarehouseProducts_products1` FOREIGN KEY (`ProductID`) REFERENCES `products` (`ProductID`) ON DELETE CASCADE,
+  CONSTRAINT `fk_WarehouseProducts_warehouses` FOREIGN KEY (`WarehouseID`) REFERENCES `warehouses` (`WarehouseID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -623,7 +623,7 @@ CREATE TABLE `warehouses` (
   `CompanyID` int NOT NULL,
   PRIMARY KEY (`WarehouseID`),
   KEY `fk_warehouses_companies1_idx` (`CompanyID`),
-  CONSTRAINT `fk_warehouses_companies1` FOREIGN KEY (`CompanyID`) REFERENCES `companies` (`CompanyID`)
+  CONSTRAINT `fk_warehouses_companies1` FOREIGN KEY (`CompanyID`) REFERENCES `companies` (`CompanyID`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

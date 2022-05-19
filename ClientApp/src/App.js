@@ -8,6 +8,8 @@ import { ApplicationPaths } from "./components/api-authorization/ApiAuthorizatio
 
 import { Home } from "./components/Home";
 import { FetchData } from "./components/FetchData";
+import CRUDEmpleados from "./components/CRUDEmpleados";
+import Movimientos from "./components/Movimientos";
 
 import "./custom.css";
 
@@ -18,7 +20,8 @@ export default class App extends Component {
     return (
       <Layout>
         <Route exact path="/" component={Home} />
-        <Route path="/counter" component={Counter} />
+        <Route path="/empleados" component={CRUDEmpleados} />
+        <Route path="/movimientos" component={Movimientos} />
         <Route path="/fetch-data" component={FetchData} />
         <Route
           path={ApplicationPaths.ApiAuthorizationPrefix}
