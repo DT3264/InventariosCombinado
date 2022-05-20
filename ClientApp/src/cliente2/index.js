@@ -24,7 +24,6 @@ export default function Cliente2() {
             </div>
           </div>
         </div>
-        <>Holaaa2</>
         <AppNavBar />
         <Switch>
           <Route exact path={path}>
@@ -43,6 +42,12 @@ export default function Cliente2() {
             <Inventario />
           </Route>
           <Route path={`${path}/movimientos`}>
+            <Movimientos />
+          </Route>
+          <Route path={`${path}/reporteventas`}>
+            <Movimientos />
+          </Route>
+          <Route path={`${path}/reporteempleados`}>
             <Movimientos />
           </Route>
         </Switch>

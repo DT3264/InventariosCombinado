@@ -60,6 +60,16 @@ export default function AppNavBar() {
                 Movimientos
               </Nav.Link>
             </NavItem>
+            <NavItem eventkey={1} href={`${url}/reporteventas`}>
+              <Nav.Link as={Link} to={`${url}/reporteventas`}>
+                Reporte ventas
+              </Nav.Link>
+            </NavItem>
+            <NavItem eventkey={1} href={`${url}/reporteempleados`}>
+              <Nav.Link as={Link} to={`${url}/reporteempleados`}>
+                Reporte empleados
+              </Nav.Link>
+            </NavItem>
           </Nav>
           <Nav className="me-auto nav col-12 col-lg-4 me-lg-4 mb-2 justify-content-end mb-md-0">
             <NavItem className="d-none d-lg-flex">
