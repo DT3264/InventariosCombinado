@@ -24,6 +24,7 @@ function Slider() {
 function Extra1() {
   return (
     <>
+    <div data-aos="fade-up">
       <Container className="container col-xxl-8 px-4 py-5">
         <Row className="flex-lg-row-reverse align-items-center g-5 py-5">
           <Col className="col-10 col-sm-8 col-lg-6">
@@ -49,6 +50,7 @@ function Extra1() {
           </Col>
         </Row>
       </Container>
+      </div>
     </>
   );
 }
@@ -59,7 +61,7 @@ function Extra2() {
       <div className="container">
         <hr className="featurette-divider" />
         <div className="row featurette align-items-center">
-          <div className="col-md-7">
+          <div className="col-md-7" data-aos="zoom-in-up" >
             <h3>
               <span className="text-muted">Gestión de órdenes de trabajo</span>
             </h3>
@@ -72,7 +74,7 @@ function Extra2() {
               finalización de órdenes de trabajo.
             </p>
           </div>
-          <div className="col-md-5">
+          <div className="col-md-5" data-aos="zoom-in-up">
             <img
               className="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
               width={500}
@@ -85,7 +87,7 @@ function Extra2() {
         <div className="b-example-divider" />
         <hr className="featurette-divider " />
         <div className="row featurette align-items-center">
-          <div className="col-md-7 order-md-2">
+          <div className="col-md-7 order-md-2 " data-aos="zoom-in-up">
             <h3>
               <span className="text-muted">Aplicaciónes de terceros</span>
             </h3>
@@ -97,7 +99,7 @@ function Extra2() {
               sistema a través de servicios web
             </p>
           </div>
-          <div className="col-md-5 order-md-1">
+          <div className="col-md-5 order-md-1" data-aos="zoom-in-up">
             <img
               className="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
               width={500}
@@ -110,7 +112,7 @@ function Extra2() {
         <div className="px-4 pt-5 my-5 text-center border-bottom">
           <h1 className="display-4 fw-bold">Gestión simplificada</h1>
           <div className="col-lg-6 mx-auto">
-            <div className="d-flex text-muted pt-3">
+            <div className="d-flex text-muted pt-3" data-aos="fade-up" data-aos-duration="1400">
               <svg
                 className="bd-placeholder-img flex-shrink-0 me-2 rounded"
                 width={32}
@@ -134,7 +136,7 @@ function Extra2() {
                 </div>
               </div>
             </div>
-            <div className="d-flex text-muted pt-3">
+            <div className="d-flex text-muted pt-3" data-aos="fade-up" data-aos-duration="1400">
               <svg
                 className="bd-placeholder-img flex-shrink-0 me-2 rounded"
                 width={32}
@@ -159,7 +161,7 @@ function Extra2() {
                 </div>
               </div>
             </div>
-            <div className="d-flex text-muted pt-3">
+            <div className="d-flex text-muted pt-3" data-aos="fade-up" data-aos-duration="1400">
               <svg
                 className="bd-placeholder-img flex-shrink-0 me-2 rounded"
                 width={32}
@@ -183,7 +185,7 @@ function Extra2() {
                 </div>
               </div>
             </div>
-            <div className="d-flex text-muted pt-3">
+            <div className="d-flex text-muted pt-3" data-aos="fade-up" data-aos-duration="1400">
               <svg
                 className="bd-placeholder-img flex-shrink-0 me-2 rounded"
                 width={32}
@@ -208,7 +210,9 @@ function Extra2() {
               </div>
             </div>
           </div>
+          <div data-aos="zoom-in-up" data-aos-duration="1400"> 
           <Image fluid src="/img/img2.jpg" alt="..." />
+          </div>
         </div>
       </div>
     </>
@@ -220,7 +224,8 @@ function Extra3() {
     <>
       <div className="b-example-divider" />
       <div className="container">
-        <div className="pricing-header p-3 pb-md-4 mx-auto text-center">
+        <div className="pricing-header p-3 pb-md-4 mx-auto text-center" data-aos="fade-up"
+     data-aos-anchor-placement="center-bottom"  data-aos-duration="1000">
           <h1 className="display-4 fw-normal">Precios</h1>
           <p className="fs-5 text-muted">
             Obtenga un vistazo de los planes que ofrecemos{" "}
@@ -237,7 +242,8 @@ function Extra4() {
     <>
       <div className="b-example-divider" />
       <div className="container">
-        <div className="pricing-header p-3 pb-md-4 mx-auto text-center">
+        <div className="pricing-header p-3 pb-md-4 mx-auto text-center" data-aos="fade-up"
+     data-aos-anchor-placement="center-bottom" data-aos-duration="1000">
           <h1 className="display-4 fw-normal">Sobre nosotros</h1>
           <p className="fs-5 text-muted">
             Northwind es una empresa ubicada en Uriangato, Guanajuato

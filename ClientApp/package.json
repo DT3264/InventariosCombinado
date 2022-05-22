@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@types/datatables.net-buttons": "^1.4.7",
+    "aos": "^2.3.4",
     "axios": "^0.26.1",
     "bootstrap": "^5.1.0",
     "datatables.net": "^1.12.1",
