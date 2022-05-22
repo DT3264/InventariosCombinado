@@ -61,10 +61,10 @@ public class WeatherForecastController : ControllerBase
 
     // GET: api/
     [HttpGet]
-    [Authorize(Policy = "RequireAdmin")]
-    // [AllowAnonymous]
-    [Route("top5Vendedores")]
-    public IEnumerable<Object> GetTop5Vendendores()
+    // [Authorize(Policy = "RequireAdmin")]
+    [AllowAnonymous]
+    [Route("top5Vendedores/{year}")]
+    public IEnumerable<Object> GetTop5Vendendores(int year)
     {
         return _context.Employees
             .Where(e => e.CompanyId == 1)
@@ -77,7 +77,7 @@ public class WeatherForecastController : ControllerBase
                 IdMovimiento = m.MovementId,
                 Anio = m.Date.Year
             })
-            .Where(em => em.Anio == 1996)
+            .Where(em => em.Anio == year)
             .Join(_context.Movementdetails,
             em => em.IdMovimiento,
             md => md.MovementId,

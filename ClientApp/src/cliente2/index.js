@@ -10,7 +10,7 @@ import Inventario from "./components/inventarioEx";
 import Precios from "./components/precios";
 import Soporte from "./components/soporte";
 import AppNavBar from "./components/AppNavBar";
-import NW from "./img/NW.png";
+import ReporteEmpleados from "./components/ReporteEmpleados";
 
 export default function Cliente2() {
   let { path, url } = useRouteMatch();
@@ -48,7 +48,7 @@ export default function Cliente2() {
             <Movimientos />
           </Route>
           <Route path={`${path}/reporteempleados`}>
-            <Movimientos />
+            <ReporteEmpleados />
           </Route>
         </Switch>
       </div>

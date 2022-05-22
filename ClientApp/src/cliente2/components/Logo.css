@@ -1,0 +1,95 @@
+/* Logo mike */
+.comFather {
+    display: flex;
+    align-items: center;
+
+
+    width: 100% !important;
+    /* padding-left: 30rem; */
+    /* height: 30rem !important; */
+}
+
+.logoAnimeN1 {
+    position: absolute;
+    transform: scale(0);
+    animation: llegar 7s 1s 1, desplazar 3.7s 2.5s 1, desaparecer 1s 5.5s backwards;
+
+}
+
+.logoAnimeN2 {
+    transform: scale(0);
+    position: absolute;
+    animation: llegar 7s 1s both;
+}
+
+.logoAnimeW {
+    position: absolute;
+    opacity: 0;
+    animation: aparecer 2s 5s both;
+}
+
+
+@keyframes llegar {
+    0% {
+        transform: scale(0);
+    }
+
+    30% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes girar2 {
+    0% {
+        transform: scale(0);
+    }
+
+    50% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes desplazar {
+    0% {}
+
+    90% {
+        padding-left: 16.5rem;
+
+    }
+
+    100% {
+        padding-left: 16.5rem;
+    }
+}
+
+@keyframes aparecer {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes desaparecer {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
