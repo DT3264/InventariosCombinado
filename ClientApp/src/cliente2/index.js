@@ -11,6 +11,7 @@ import Precios from "./components/precios";
 import Soporte from "./components/soporte";
 import AppNavBar from "./components/AppNavBar";
 import ReporteEmpleados from "./components/ReporteEmpleados";
+import ReporteVentas from "./components/ReporteVentas";
 
 export default function Cliente2() {
   let { path, url } = useRouteMatch();
@@ -45,7 +46,7 @@ export default function Cliente2() {
             <Movimientos />
           </Route>
           <Route path={`${path}/reporteventas`}>
-            <Movimientos />
+            <ReporteVentas />
           </Route>
           <Route path={`${path}/reporteempleados`}>
             <ReporteEmpleados />
