@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import authService from "./api-authorization/AuthorizeService";
-import authService from "./../../components/api-authorization/AuthorizeService";
+import authService from "../../components/api-authorization/AuthorizeService";
 import { Chart } from "react-google-charts";
 import LogoCargando from "./LogoCargando";
 import { Form } from "react-bootstrap";
@@ -21,14 +21,15 @@ import $ from "jquery";
 import axios from "axios";
 import MultiRangeSlider from "multi-range-slider-react";
 
-export default class ReporteVentas extends Component {
+export default class ReporteDesgloseProducto extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
       isUserValid: false,
       loading: true,
-      pID: 1,
+      ids: [],
+      pID: -1,
       minValue: 0,
       maxValue: 23,
     };
@@ -39,6 +40,7 @@ export default class ReporteVentas extends Component {
     this.setState({ maxValue: e.maxValue });
   }
   componentDidMount() {
+    this.fetchIds();
     this.populateData();
     //initialize datatable
     $(document).ready(function () {
@@ -60,6 +62,25 @@ export default class ReporteVentas extends Component {
       setTimeout(resolve, duration);
     });
   }
+onlyUnique(v, i, s){
+  return s.indexOf(v) === i;
+}
+
+  async fetchIds() {
+    authService.getUser().then((u) => {
+      const valo = authService.isAdmin(u);
+      this.setState({ isUserValid: valo });
+    });
+    const response = await fetch(
+      `products`,
+    );
+    const data = await response.json();
+    console.log(data);
+    if(data!= undefined){
+    const unique = [...new Map(data.map(i => [i.productName, i])).values()];
+    this.setState({ ids: unique, loading: false });
+    }
+  }
   async populateData() {
     authService.getUser().then((u) => {
       const valo = authService.isAdmin(u);
@@ -69,7 +90,7 @@ export default class ReporteVentas extends Component {
     const deFecha = this.fechas[this.state.minValue];
     const aFecha = this.fechas[this.state.maxValue];
     const response = await fetch(
-      `weatherforecast/productopormes/${this.state.pID},${deFecha},${aFecha}`,
+      `reportes/productopormes/${this.state.pID},${deFecha},${aFecha}`,
       {
         headers: !token ? {} : { Authorization: `Bearer ${token}` },
       }
@@ -177,19 +198,25 @@ export default class ReporteVentas extends Component {
       <p>No hay datos para el producto/fecha especificados</p>
     );
 
+    console.log("ids:")
+    console.log(this.state.ids);
     return (
       <div>
         <h1 id="tabelLabel">Ventas por producto</h1>
         <Form.Label>
           ID del producto
-          <Form.Control
+          <Form.Select
             aria-label="Año de ventas"
             value={this.state.pID}
             onChange={(e) => {
               this.setState({ loading: true, pID: e.target.value });
               this.populateData();
             }}
-          ></Form.Control>
+          >
+            <option value="-1">Seleccione un producto</option>
+            {this.state.ids.map(i => 
+            <option value={i.productId}>{i.productName}</option>)}
+          </Form.Select>
         </Form.Label>
         <br></br>
         Rango de fechas

@@ -17,6 +17,7 @@ const context = [
   "/_framework",
   "/api",
   "/reportes",
+  "/products",
 ];
 
 module.exports = function (app) {

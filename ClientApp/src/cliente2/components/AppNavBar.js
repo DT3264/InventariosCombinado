@@ -62,7 +62,7 @@ export default function AppNavBar() {
             </NavItem>
             <NavItem eventkey={1} href={`${url}/reporteventas`}>
               <Nav.Link as={Link} to={`${url}/reporteventas`}>
-                Reporte ventas
+                Reporte desglose producto
               </Nav.Link>
             </NavItem>
             <NavItem eventkey={1} href={`${url}/reporteempleados`}>
