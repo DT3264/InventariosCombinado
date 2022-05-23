@@ -16,6 +16,7 @@ const context = [
   "/ApplyDatabaseMigrations",
   "/_framework",
   "/api",
+  "/reportes",
 ];
 
 module.exports = function (app) {

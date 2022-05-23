@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import authService from "./api-authorization/AuthorizeService";
-import authService from "./../../components/api-authorization/AuthorizeService";
+import authService from "../../components/api-authorization/AuthorizeService";
 import { Chart } from "react-google-charts";
 import LogoCargando from "./LogoCargando";
 import { Form } from "react-bootstrap";
@@ -20,8 +20,8 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import $ from "jquery";
 import axios from "axios";
 
-export default class ReporteEmpleados extends Component {
-  static displayName = ReporteEmpleados.name;
+export default class ReporteTopProductos extends Component {
+  static displayName = ReporteTopProductos.name;
 
   constructor(props) {
     super(props);
@@ -35,19 +35,6 @@ export default class ReporteEmpleados extends Component {
 
   componentDidMount() {
     this.populateWeatherData();
-    //initialize datatable
-    $(document).ready(function () {
-      setTimeout(function () {
-        $("#tabla").DataTable({
-          pagingType: "full_numbers",
-          pageLength: 5,
-          processing: true,
-          dom: "Bfrtip",
-          order: [[1, "desc"]],
-          buttons: ["copy", "csv", "print"],
-        });
-      }, 1000);
-    });
   }
 
   sleep(duration) {
@@ -62,13 +49,13 @@ export default class ReporteEmpleados extends Component {
     });
     const token = await authService.getAccessToken();
     const response = await fetch(
-      `weatherforecast/top5Vendedores/${this.state.anio}`,
+      `reportes/top5productos/${this.state.anio}`,
       {
         headers: !token ? {} : { Authorization: `Bearer ${token}` },
       }
     );
 
-    await this.sleep(6000);
+    //await this.sleep(6000);
 
     if (response.status != 403) {
       const data = await response.json();
@@ -76,24 +63,90 @@ export default class ReporteEmpleados extends Component {
     } else {
       this.setState({ loading: false });
     }
+    setTimeout(function () {
+      var groupColumn = 0;
+      var table = $('#tabla').DataTable({
+          columnDefs: [{ visible: false, targets: groupColumn }],
+          order: [[groupColumn, 'asc']],
+          displayLength: 25,
+          drawCallback: function (settings) {
+              var api = this.api();
+              var rows = api.rows({ page: 'current' }).nodes();
+              var last = null;
+   
+              api
+                  .column(groupColumn, { page: 'current' })
+                  .data()
+                  .each(function (group, i) {
+                      if (last !== group) {
+                          $(rows)
+                              .eq(i)
+                              .before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
+   
+                          last = group;
+                      }
+                  });
+          },
+      });
+   
+      // Order by the grouping
+      $('#tabla tbody').on('click', 'tr.group', function () {
+          var currentOrder = table.order()[0];
+          if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
+              table.order([groupColumn, 'desc']).draw();
+          } else {
+              table.order([groupColumn, 'asc']).draw();
+          }
+      });
+      }, 1000);
   }
 
-  static renderDataTable(data) {
+  groupBy(collection, property) {
+    var i = 0, val, index,
+        values = [], result = [];
+    for (; i < collection.length; i++) {
+        val = collection[i][property];
+        index = values.indexOf(val);
+        if (index > -1)
+            result[index].push(collection[i]);
+        else {
+            values.push(val);
+            result.push([collection[i]]);
+        }
+    }
+    return result;
+}
+
+
+  renderDataTable(data) {
     if (!data.isUserValid) {
       return <>Usuario no valido</>;
     }
     var options = {
-      title: "Ventas por empleado",
+      title: "Top 5 productos vendidos por año",
       bar: { groupWidth: "95%" },
       legend: { position: "none" },
     };
-    var chartData = [["Empleado", "Ventas"]];
+    var chartData = [["Producto", "Trimestre 1", "Trimestre 2", "Trimestre 3", "Trimestre 4"]];
     data.data = data.data.sort((a, b) => b.ventas - a.ventas);
-    data.data.forEach((d) => chartData.push([d.empleado, d.ventas]));
+    var agrupados = this.groupBy(data.data, "prod");
+    var chartData2 = agrupados.map(e => {
+      var result = [e[0].prod];
+      e = e.sort((a,b)=>a.trimestre-b.trimestre);
+      console.log(e);
+      for(var i=1; i<5; i++){
+        var v = e.find(x => x.trimestre == i);
+        if(v == undefined) result.push(0);
+        else result.push(v.ventas);
+      }
+      return result;
+    });
+    //console.log(chartData);
+    chartData2.forEach(e => chartData.push(e));
     return (
       <>
         <Chart
-          chartType="BarChart"
+          chartType="Bar"
           width="100%"
           height="400px"
           data={chartData}
@@ -104,7 +157,8 @@ export default class ReporteEmpleados extends Component {
           <table id="tabla" className="table table-hover table-bordered">
             <thead>
               <tr>
-                <th>Empleado</th>
+                <th>Trimestre</th>
+                <th>Producto</th>
                 <th>Ventas</th>
               </tr>
             </thead>
@@ -112,7 +166,8 @@ export default class ReporteEmpleados extends Component {
               {data.data.map((result) => {
                 return (
                   <tr>
-                    <td>{result.empleado}</td>
+                    <td>{result.trimestre}</td>
+                    <td>{result.prod}</td>
                     <td>{result.ventas}</td>
                   </tr>
                 );
@@ -133,12 +188,12 @@ export default class ReporteEmpleados extends Component {
         <LogoCargando />
       </>
     ) : (
-      ReporteEmpleados.renderDataTable(this.state)
+      this.renderDataTable(this.state)
     );
 
     return (
       <div>
-        <h1 id="tabelLabel">Ventas por empleado</h1>
+        <h1 id="tabelLabel">Top 5 productos vendidos por año</h1>
         <Form.Label>
           Año de ventas
           <Form.Select

@@ -10,7 +10,7 @@ import Inventario from "./components/inventarioEx";
 import Precios from "./components/precios";
 import Soporte from "./components/soporte";
 import AppNavBar from "./components/AppNavBar";
-import ReporteEmpleados from "./components/ReporteEmpleados";
+import ReporteTopProductos from "./components/ReporteTopProductos";
 import ReporteVentas from "./components/ReporteVentas";
 
 export default function Cliente2() {
@@ -49,7 +49,7 @@ export default function Cliente2() {
             <ReporteVentas />
           </Route>
           <Route path={`${path}/reporteempleados`}>
-            <ReporteEmpleados />
+            <ReporteTopProductos />
           </Route>
         </Switch>
       </div>

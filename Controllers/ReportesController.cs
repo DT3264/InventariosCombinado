@@ -11,38 +11,22 @@ namespace aspnetcore_react_auth.Controllers;
 //[Authorize]
 [ApiController]
 [Route("[controller]")]
-public class WeatherForecastController : ControllerBase
+public class ReportesController : ControllerBase
 {
-    private static readonly string[] Summaries = new[]
-    {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
 
-    private readonly ILogger<WeatherForecastController> _logger;
+    private readonly ILogger<ReportesController> _logger;
 
 
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ApplicationDbContext _context;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger,
+    public ReportesController(ILogger<ReportesController> logger,
     ApplicationDbContext context,
     UserManager<ApplicationUser> userManager)
     {
         _logger = logger;
         _context = context;
         _userManager = userManager;
-    }
-
-    [HttpGet]
-    public IEnumerable<WeatherForecast> Get()
-    {
-        return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = DateTime.Now.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-        })
-        .ToArray();
     }
 
     [HttpGet]
@@ -113,22 +97,14 @@ public class WeatherForecastController : ControllerBase
 
         var topElementos = _context.Movements
         .Join(_context.Movementdetails, m => m.MovementId, md => md.MovementId, (m, md) => new { pID = md.ProductId, fecha = m.Date, md.Quantity, tipo = m.Type })
+        .Join(_context.Products, prev => prev.pID, act => act.ProductId, (prev, act) => new { pID = prev.pID, prod = act.ProductName, prev.fecha, prev.Quantity, prev.tipo })
         .Where(p => p.tipo == "VENTA" && p.fecha.Year == year)
-        .Select(p => new { p.pID, p.tipo, trimestre = Math.Ceiling(p.fecha.Month / 3f), p.Quantity })
+        .Select(p => new { p.pID, p.prod, p.tipo, trimestre = Math.Ceiling(p.fecha.Month / 3f), p.Quantity })
         .Where(p => ids.Contains(p.pID))
-        .GroupBy(p => new { p.pID, p.trimestre })
-        .Select(g => new { prod = g.Key.pID, trimestre = g.Key.trimestre, ventas = g.Sum(p => p.Quantity) });
+        .GroupBy(p => new { p.prod, p.trimestre })
+        .Select(g => new { prod = g.Key.prod, trimestre = g.Key.trimestre, ventas = g.Sum(p => p.Quantity) });
 
-        var trimestres = new List<List<Object>>();
-        trimestres.Add(new List<object>());
-        trimestres.Add(new List<object>());
-        trimestres.Add(new List<object>());
-        trimestres.Add(new List<object>());
-        foreach (var p in topElementos)
-        {
-            trimestres[(int)p.trimestre - 1].Add(new { pID = p.prod, ventas = p.ventas });
-        }
-        return trimestres;
+        return topElementos;
     }
 
     [HttpGet]

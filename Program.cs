@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 // builder.Services.AddDbContext<ApplicationDbContext>(options =>
 //     options.UseSqlite(connectionString));
 
-var connectionString = "server=localhost;port=3306;database=northwind;uid=root;password=0000";
+var connectionString = "server=localhost;port=3306;database=northwind;uid=root;password=root";
 var serverVersion = new MySqlServerVersion(new Version(8, 0, 26));
 builder.Services.AddDbContext<ApplicationDbContext>(
  dbContextOptions => dbContextOptions.UseMySql(connectionString, serverVersion)
