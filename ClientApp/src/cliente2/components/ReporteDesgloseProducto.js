@@ -26,7 +26,7 @@ export default class ReporteDesgloseProducto extends Component {
     super(props);
     this.state = {
       data: [],
-      isUserValid: false,
+      isUserValid: true,
       loading: true,
       ids: [],
       pID: -1,
@@ -62,30 +62,28 @@ export default class ReporteDesgloseProducto extends Component {
       setTimeout(resolve, duration);
     });
   }
-onlyUnique(v, i, s){
-  return s.indexOf(v) === i;
-}
+  onlyUnique(v, i, s) {
+    return s.indexOf(v) === i;
+  }
 
   async fetchIds() {
-    authService.getUser().then((u) => {
-      const valo = authService.isAdmin(u);
-      this.setState({ isUserValid: valo });
-    });
-    const response = await fetch(
-      `products`,
-    );
+    // authService.getUser().then((u) => {
+    //   const valo = authService.isAdmin(u);
+    //   this.setState({ isUserValid: valo });
+    // });
+    const response = await fetch(`products`);
     const data = await response.json();
     console.log(data);
-    if(data!= undefined){
-    const unique = [...new Map(data.map(i => [i.productName, i])).values()];
-    this.setState({ ids: unique, loading: false });
+    if (data != undefined) {
+      const unique = [...new Map(data.map((i) => [i.productName, i])).values()];
+      this.setState({ ids: unique, loading: false });
     }
   }
   async populateData() {
-    authService.getUser().then((u) => {
-      const valo = authService.isAdmin(u);
-      this.setState({ isUserValid: valo });
-    });
+    // authService.getUser().then((u) => {
+    //   const valo = authService.isAdmin(u);
+    //   this.setState({ isUserValid: valo });
+    // });
     const token = await authService.getAccessToken();
     const deFecha = this.fechas[this.state.minValue];
     const aFecha = this.fechas[this.state.maxValue];
@@ -198,7 +196,7 @@ onlyUnique(v, i, s){
       <p>No hay datos para el producto/fecha especificados</p>
     );
 
-    console.log("ids:")
+    console.log("ids:");
     console.log(this.state.ids);
     return (
       <div>
@@ -214,8 +212,9 @@ onlyUnique(v, i, s){
             }}
           >
             <option value="-1">Seleccione un producto</option>
-            {this.state.ids.map(i => 
-            <option value={i.productId}>{i.productName}</option>)}
+            {this.state.ids.map((i) => (
+              <option value={i.productId}>{i.productName}</option>
+            ))}
           </Form.Select>
         </Form.Label>
         <br></br>

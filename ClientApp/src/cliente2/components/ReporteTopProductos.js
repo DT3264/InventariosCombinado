@@ -48,12 +48,9 @@ export default class ReporteTopProductos extends Component {
       this.setState({ isUserValid: valo });
     });
     const token = await authService.getAccessToken();
-    const response = await fetch(
-      `reportes/top5productos/${this.state.anio}`,
-      {
-        headers: !token ? {} : { Authorization: `Bearer ${token}` },
-      }
-    );
+    const response = await fetch(`reportes/top5productos/${this.state.anio}`, {
+      headers: !token ? {} : { Authorization: `Bearer ${token}` },
+    });
 
     //await this.sleep(6000);
 
@@ -65,58 +62,61 @@ export default class ReporteTopProductos extends Component {
     }
     setTimeout(function () {
       var groupColumn = 0;
-      var table = $('#tabla').DataTable({
-          columnDefs: [{ visible: false, targets: groupColumn }],
-          order: [[groupColumn, 'asc']],
-          displayLength: 25,
-          drawCallback: function (settings) {
-              var api = this.api();
-              var rows = api.rows({ page: 'current' }).nodes();
-              var last = null;
-   
-              api
-                  .column(groupColumn, { page: 'current' })
-                  .data()
-                  .each(function (group, i) {
-                      if (last !== group) {
-                          $(rows)
-                              .eq(i)
-                              .before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
-   
-                          last = group;
-                      }
-                  });
-          },
+      var table = $("#tabla").DataTable({
+        columnDefs: [{ visible: false, targets: groupColumn }],
+        order: [[groupColumn, "asc"]],
+        displayLength: 25,
+        drawCallback: function (settings) {
+          var api = this.api();
+          var rows = api.rows({ page: "current" }).nodes();
+          var last = null;
+
+          api
+            .column(groupColumn, { page: "current" })
+            .data()
+            .each(function (group, i) {
+              if (last !== group) {
+                $(rows)
+                  .eq(i)
+                  .before(
+                    '<tr class="group"><td colspan="5">' + group + "</td></tr>"
+                  );
+
+                last = group;
+              }
+            });
+        },
       });
-   
+
       // Order by the grouping
-      $('#tabla tbody').on('click', 'tr.group', function () {
-          var currentOrder = table.order()[0];
-          if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
-              table.order([groupColumn, 'desc']).draw();
-          } else {
-              table.order([groupColumn, 'asc']).draw();
-          }
+      $("#tabla tbody").on("click", "tr.group", function () {
+        var currentOrder = table.order()[0];
+        if (currentOrder[0] === groupColumn && currentOrder[1] === "asc") {
+          table.order([groupColumn, "desc"]).draw();
+        } else {
+          table.order([groupColumn, "asc"]).draw();
+        }
       });
-      }, 1000);
+    }, 1000);
   }
 
   groupBy(collection, property) {
-    var i = 0, val, index,
-        values = [], result = [];
+    var i = 0,
+      val,
+      index,
+      values = [],
+      result = [];
     for (; i < collection.length; i++) {
-        val = collection[i][property];
-        index = values.indexOf(val);
-        if (index > -1)
-            result[index].push(collection[i]);
-        else {
-            values.push(val);
-            result.push([collection[i]]);
-        }
+      val = collection[i][property];
+      index = values.indexOf(val);
+      if (index > -1) result[index].push(collection[i]);
+      else {
+        values.push(val);
+        result.push([collection[i]]);
+      }
     }
     return result;
-}
-
+  }
 
   renderDataTable(data) {
     if (!data.isUserValid) {
@@ -127,22 +127,24 @@ export default class ReporteTopProductos extends Component {
       bar: { groupWidth: "95%" },
       legend: { position: "none" },
     };
-    var chartData = [["Producto", "Trimestre 1", "Trimestre 2", "Trimestre 3", "Trimestre 4"]];
+    var chartData = [
+      ["Producto", "Trimestre 1", "Trimestre 2", "Trimestre 3", "Trimestre 4"],
+    ];
     data.data = data.data.sort((a, b) => b.ventas - a.ventas);
     var agrupados = this.groupBy(data.data, "prod");
-    var chartData2 = agrupados.map(e => {
+    var chartData2 = agrupados.map((e) => {
       var result = [e[0].prod];
-      e = e.sort((a,b)=>a.trimestre-b.trimestre);
+      e = e.sort((a, b) => a.trimestre - b.trimestre);
       console.log(e);
-      for(var i=1; i<5; i++){
-        var v = e.find(x => x.trimestre == i);
-        if(v == undefined) result.push(0);
+      for (var i = 1; i < 5; i++) {
+        var v = e.find((x) => x.trimestre == i);
+        if (v == undefined) result.push(0);
         else result.push(v.ventas);
       }
       return result;
     });
     //console.log(chartData);
-    chartData2.forEach(e => chartData.push(e));
+    chartData2.forEach((e) => chartData.push(e));
     return (
       <>
         <Chart
